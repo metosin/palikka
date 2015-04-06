@@ -1,6 +1,6 @@
-(ns palikka.context
+(ns palikka.components.context
   (:require [com.stuartsierra.component :as component]
-            [metosin.context-provider :as cp]))
+            [palikka.context-provider :as cp]))
 
 (defn context-provider? [component]
   (satisfies? cp/ContextProvider component))
