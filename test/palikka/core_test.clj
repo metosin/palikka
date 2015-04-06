@@ -4,12 +4,10 @@
             [palikka.components.env :as env]
             [palikka.components.handler :as handler]
             [palikka.components.http-kit :as http-kit]
-            [palikka.components.context :as context]
             [palikka.test-utils :refer :all]
             [clj-http.client :as client]))
 
 (def app (fn [req]
-           (println "req" req)
            {:status 200 :body (-> req :palikka/context :config :test)}))
 
 (defn base-system []
@@ -18,7 +16,7 @@
     :handler (using (handler/create 'palikka.core-test/app) [:env])
     :http-kit (using (http-kit/create) [:env :handler])))
 
-(def system (base-system))
+(defonce system (base-system))
 
 (deftest system-test
   (is (some? (get-in system [:http-kit :http-kit])))
