@@ -11,13 +11,14 @@
 (defrecord Http-kit [env handler]
   component/Lifecycle
   (start [this]
+    (println env)
     (let [config  (env-get (:config env) [:http] Config)]
       (println "Starting http-kit on port" (:port config))
-      (assoc this :http-kit (http-kit/run-server handler config))))
+      (assoc this :http-kit (http-kit/run-server (:handler handler) config))))
   (stop [this]
     (if-let [http-kit (:http-kit this)]
       (http-kit))
     (assoc this :http-kit nil)))
 
 (defn create []
-  (->Http-kit))
+  (map->Http-kit {}))

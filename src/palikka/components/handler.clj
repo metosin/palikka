@@ -1,18 +1,18 @@
 (ns palikka.components.handler
   (:require [com.stuartsierra.component :as component]
-            [palikka.components.context :as context]))
+            [palikka.context :as context]))
 
-(defn wrap-context [handler context]
-  (let [c (context/extract-context context)]
+(defn wrap-context [handler system]
+  (let [c (context/create-context system)]
     (fn [req]
-      (handler (assoc req ::context c)))))
+      (handler (assoc req :palikka/context c)))))
 
 (defrecord Handler [sym context]
   component/Lifecycle
   (start [this]
     (require (symbol (namespace sym)) :reload)
     (assoc this :handler (-> (resolve sym)
-                             (wrap-context context))))
+                             (wrap-context this))))
   (stop [this]
     this))
 

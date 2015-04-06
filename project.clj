@@ -18,7 +18,8 @@
                    :resource-paths ["test-resources"]
                    :dependencies [[com.novemberain/monger "2.0.1"]
                                   [hikari-cp "1.2.1"]
-                                  [http-kit "2.1.18"]]}
+                                  [http-kit "2.1.18"]
+                                  [clj-http "1.1.0"]]}
              :1.7 {:dependencies [[org.clojure/clojure "1.7.0-alpha6"]]}}
   :aliases {"all" ["with-profile" "dev:dev,1.7"]
             "test-clj"  ["all" "do" ["test"] ["check"]]})

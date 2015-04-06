@@ -3,10 +3,10 @@
             [maailma.core :refer [read-config!]]
             [palikka.context-provider :as cp]))
 
-(defrecord Env [prefix config]
+(defrecord Env [prefix config override]
   component/Lifecycle
   (start [this]
-    (assoc this :config (read-config! prefix config)))
+    (assoc this :config (read-config! prefix override)))
   (stop [this]
     (assoc this :config nil))
 
@@ -16,4 +16,4 @@
 
 (defn create [prefix config]
   (map->Env {:prefix prefix
-             :config config}))
+             :override config}))
