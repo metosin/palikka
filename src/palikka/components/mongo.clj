@@ -23,6 +23,6 @@
   (provide-context [this]
     {:db (:db this) :gfs (:fs this)}))
 
-(defn create-mongo-connection
+(defn create
   []
   (map->Mongo {}))
