@@ -1,0 +1,1 @@
+(ns palikka.core-test)
