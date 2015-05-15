@@ -2,7 +2,7 @@
   (:require [monger.core :as m]
             [com.stuartsierra.component :as component]
             [maailma.core :refer [env-get]]
-            [palikka.context :as c]))
+            [palikka.context-provider :as cp]))
 
 (defrecord Mongo [env conn db gfs]
   component/Lifecycle
@@ -19,7 +19,7 @@
       (m/disconnect conn))
     (assoc this :conn nil :db nil :gfs nil))
 
-  c/ContextProvider
+  cp/ContextProvider
   (provide-context [this]
     {:db (:db this) :gfs (:fs this)}))
 

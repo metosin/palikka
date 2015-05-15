@@ -14,6 +14,6 @@
   (provide-context [this]
     {:config config}))
 
-(defn create [prefix config]
+(defn create [prefix override]
   (map->Env {:prefix prefix
-             :override config}))
+             :override override}))
