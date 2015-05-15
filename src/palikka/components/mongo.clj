@@ -7,7 +7,7 @@
 (defrecord Mongo [env conn db gfs]
   component/Lifecycle
   (start [this]
-    (let [url (env-get (:config env) [:mongo :url])
+    (let [url (env-get (:config env) [:mongo :url] String)
           {:keys [conn db]} (m/connect-via-uri url)]
       (println (format "Connected to mongo on %s" url))
       (assoc this

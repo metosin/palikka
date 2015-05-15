@@ -4,28 +4,26 @@
             [palikka.components.env :as env]
             [palikka.components.handler :as handler]
             [palikka.components.http-kit :as http-kit]
+            [palikka.context :refer [create-context]]
             [palikka.test-utils :refer :all]
-            [clj-http.client :as client]))
+            [clj-http.client :as client]
+            [palikka.example.system :refer [base-system]]))
 
-(def app (fn [req]
-           {:status 200 :body (-> req :palikka/context :config :test)}))
-
-(defn base-system []
-  (system-map
-    :env (env/create "palikka" {:http {:port 9999} :test "hello world"})
-    :handler (using (handler/create 'palikka.core-test/app) [:env])
-    :http-kit (using (http-kit/create) [:env :handler])))
-
-(defonce system (base-system))
+(defonce system (base-system {:http {:port 9999}, :test "hello world"}))
+(use-fixtures :once (system-fixture #'system))
 
 (deftest system-test
   (is (some? (get-in system [:http-kit :http-kit])))
   (is (= "hello world"
          (:body (client/get "http://localhost:9999")))))
 
-(use-fixtures :once (system-fixture #'system))
+(deftest context-test
+  (let [ctx (create-context system)]
+    (is (map? (:config ctx)))
+    (is (instance? clojure.lang.Atom (:db ctx)))))
 
 (comment
-  (alter-var-root #'system component/start)
+  (system-up! #'system)
+  (meta system)
   (:env system)
-  (alter-var-root #'system component/stop))
+  (system-down! #'system))
