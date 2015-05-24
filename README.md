@@ -4,6 +4,14 @@
 
 [API Docs](http://metosin.github.io/palikka/palikka.core.html).
 
+## Features
+
+- Integrated with [maailma](https://github.com/metosin/maailma) envinronment lib, provides Schemas etc.
+    - **Problem**: Currently each component reads their config from static path in the config map, thus making in impossible to have multiple instances of the same component with different config
+- [palikka.test-utils](./src/palikka/test_utils.clj) provides fixtures for `clojure.test` and background for Midje.
+- Context. Context is a selected set of stuff from system. Passing the whole system down to implementation is inconvenient as the interesting bits of system are somewhere inside the component. Using context e.g. mongo component can decide to publish `:conn`, `:db` and `:gfs` as top-level context keys.
+    - **Problem**: As context keys are hardcoded in component, multiple instances of the same component would shadow others context keys.
+
 ## Component dependencies
 
 This library doesn't depend on libraries used by components,
