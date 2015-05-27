@@ -2,12 +2,14 @@
   (:require [com.stuartsierra.component :as component]
             [hikari-cp.core :as hikari]
             [schema.core :as s]
+            [schema-tools.core :as st]
             [maailma.core :refer [env-get]]
             [palikka.context-provider :as cp]))
 
 (s/defschema Config
-  (assoc hikari/ConfigurationOptions
-         :port-number s/Num))
+  (assoc (st/optional-keys hikari/ConfigurationOptions)
+         :port-number s/Num
+         s/Keyword s/Str))
 
 (defrecord Database [env db]
   component/Lifecycle

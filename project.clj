@@ -8,6 +8,7 @@
   :dependencies [[org.clojure/clojure "1.7.0-beta3"]
                  [prismatic/schema "0.4.2"]
                  [metosin/maailma "0.1.0-SNAPSHOT"]
+                 [metosin/schema-tools "0.4.2"]
                  [com.stuartsierra/component "0.2.3"]]
   :plugins [[codox "0.8.10"]]
 
