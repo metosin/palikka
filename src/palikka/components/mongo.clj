@@ -21,7 +21,7 @@
 
   cp/ContextProvider
   (provide-context [this]
-    {:db (:db this) :gfs (:fs this)}))
+    {:db (:db this) :gfs (:gfs this)}))
 
 (defn create
   []
