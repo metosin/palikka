@@ -1,6 +1,17 @@
 (ns palikka.core
   (:require [com.stuartsierra.component :as component]))
 
+(defprotocol GetProperty
+  (-get [this component]))
+
+(extend-protocol GetProperty
+  clojure.lang.IFn
+  (-get [f component]
+    (f component))
+  clojure.lang.PersistentVector
+  (-get [ks component]
+    (get-in component ks)))
+
 (def +provides+ ::provides)
 
 (defn providing
@@ -31,8 +42,8 @@
   (reduce
     (fn [context component]
       (if-let [ctx (+provides+ (meta component))]
-        (reduce-kv (fn [context k v]
-                     (assoc context k (v component)))
+        (reduce-kv (fn [context k x]
+                     (assoc context k (-get x component)))
                    context
                    ctx)
         context))
@@ -57,7 +68,7 @@
 
 (defn injections
   [component]
-  (reduce-kv (fn [acc k f]
-               (assoc acc k (f component)))
+  (reduce-kv (fn [acc k x]
+               (assoc acc k (-get x component)))
              {}
              (+injections+ (meta component))))

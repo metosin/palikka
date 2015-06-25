@@ -18,4 +18,4 @@
                      (using [:env :db]))
     :http-kit    (-> (http-kit/create)
                      (using [:env :handler])
-                     (injecting {:config #(-> % :env :config :http)}))))
+                     (injecting {:config [:env :config :http]}))))
