@@ -1,9 +1,9 @@
 (ns palikka.components.handler
   (:require [com.stuartsierra.component :as component]
-            [palikka.context :as context]))
+            [palikka.core :as palikka]))
 
 (defn wrap-context [handler system]
-  (let [c (context/create-context system)]
+  (let [c (palikka/create-context system)]
     (fn [req]
       (handler (assoc req :palikka/context c)))))
 

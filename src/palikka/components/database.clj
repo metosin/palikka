@@ -3,8 +3,7 @@
             [hikari-cp.core :as hikari]
             [schema.core :as s]
             [schema-tools.core :as st]
-            [maailma.core :refer [env-get]]
-            [palikka.context-provider :as cp]))
+            [maailma.core :refer [env-get]]))
 
 (s/defschema Config
   (assoc (st/optional-keys hikari/ConfigurationOptions)
@@ -22,11 +21,7 @@
     (when-let [ds (-> this :db :datasource)]
       (hikari/close-datasource ds)
       (.shutdown ds))
-    (assoc this :db nil))
-
-  cp/ContextProvider
-  (provide-context [this]
-    {:db db}))
+    (assoc this :db nil)))
 
 (defn create []
   (map->Database {}))

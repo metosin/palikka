@@ -1,10 +1,10 @@
 (ns user
   (:require [reloaded.repl :refer [system init start stop go reset]]
-            [palikka.context :as context]))
+            [palikka.core :as palikka]))
 
 (reloaded.repl/set-init (fn []
                           (require 'project.system)
                           ((resolve 'project.system/base-system))))
 
 (defn context []
-  (context/create-context system))
+  (palikka/create-context system))

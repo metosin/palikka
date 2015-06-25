@@ -4,7 +4,7 @@
             [palikka.components.env :as env]
             [palikka.components.handler :as handler]
             [palikka.components.http-kit :as http-kit]
-            [palikka.context :refer [create-context]]
+            [palikka.core :refer [create-context]]
             [palikka.test-utils :refer :all]
             [clj-http.client :as client]
             [palikka.example.system :refer [base-system]]))
