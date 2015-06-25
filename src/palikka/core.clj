@@ -1,4 +1,5 @@
-(ns palikka.core)
+(ns palikka.core
+  (:require [com.stuartsierra.component :as component]))
 
 (def +provides+ ::provides)
 
@@ -20,8 +21,8 @@
       (vector? spec) (into {} (map (fn [x] [x x]) spec))
 
       :else
-      (throw (ex-info "Context must be a map or vector"
-                      {:reason ::invalid-spec
+      (throw (ex-info "Provides spec must be a map or vector"
+                      {:reason ::invalid-provides-spec
                        :component component
                        :dependencies spec})))))
 
@@ -37,3 +38,26 @@
         context))
     {}
     (vals system)))
+
+(def +injections+ ::injections)
+
+(defn injecting
+  [component spec]
+  (vary-meta
+    component
+    update-in [+injections+] (fnil merge {})
+    (cond
+      (map? spec) spec
+
+      :else
+      (throw (ex-info "Injections spec must be a map"
+                      {:reason ::invalid-injections-spec
+                       :component component
+                       :dependencies spec})) )))
+
+(defn injections
+  [component]
+  (reduce-kv (fn [acc k f]
+               (assoc acc k (f component)))
+             {}
+             (+injections+ (meta component))))

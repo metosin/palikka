@@ -1,5 +1,6 @@
 (ns palikka.example.db
-  (:require [com.stuartsierra.component :as component]))
+  (:require [com.stuartsierra.component :as component]
+            [palikka.core :refer [injections]]))
 
 (defrecord Db [db]
   component/Lifecycle

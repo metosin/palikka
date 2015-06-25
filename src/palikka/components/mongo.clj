@@ -1,12 +1,16 @@
 (ns palikka.components.mongo
   (:require [monger.core :as m]
             [com.stuartsierra.component :as component]
-            [maailma.core :refer [env-get]]))
+            [schema.core :as s]))
 
-(defrecord Mongo [env conn db gfs]
+(s/defschema Config
+  {:url String})
+
+(defrecord Mongo [conn db gfs]
   component/Lifecycle
   (start [this]
-    (let [url (env-get (:config env) [:mongo :url] String)
+    (let [{:keys [config]}  (injections this)
+          {:keys [url]}     (s/validate Config config)
           {:keys [conn db]} (m/connect-via-uri url)]
       (println (format "Connected to mongo on %s" url))
       (assoc this

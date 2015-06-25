@@ -4,12 +4,12 @@
             [palikka.components.env :as env]
             [palikka.components.handler :as handler]
             [palikka.components.http-kit :as http-kit]
-            [palikka.core :refer [create-context]]
+            [palikka.core :refer :all]
             [palikka.test-utils :refer :all]
             [clj-http.client :as client]
             [palikka.example.system :refer [base-system]]))
 
-(defonce system (base-system {:http {:port 9999}, :test "hello world"}))
+(defonce system (base-system {:http {:port 9999}, :test "hello world" :db {:foo :bar}}))
 (use-fixtures :once (system-fixture #'system))
 
 (deftest system-test
