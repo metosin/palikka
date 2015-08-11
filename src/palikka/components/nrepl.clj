@@ -11,7 +11,7 @@
 (defrecord Nrepl []
   component/Lifecycle
   (start [this]
-    (let [{:keys [config]} (injections things)
+    (let [{:keys [config]} (injections this)
           {:keys [port]}   (s/validate Config config)]
       (println "Starting nrepl on port" port)
       (assoc this :nrepl (nrepl/start-server :port port))))

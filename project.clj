@@ -5,7 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"
             :distribution :repo
             :comments "same as Clojure"}
-  :dependencies [[org.clojure/clojure "1.7.0-RC2"]
+  :dependencies [[org.clojure/clojure "1.7.0"]
                  [prismatic/schema "0.4.3"]
                  [metosin/maailma "0.1.0-SNAPSHOT"]
                  [metosin/schema-tools "0.4.3"]

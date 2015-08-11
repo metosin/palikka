@@ -1,6 +1,7 @@
 (ns palikka.components.mongo
   (:require [monger.core :as m]
             [com.stuartsierra.component :as component]
+            [palikka.core :refer [injections]]
             [schema.core :as s]))
 
 (s/defschema Config
