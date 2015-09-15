@@ -2,7 +2,6 @@
   (:require [com.stuartsierra.component :as component]
             [hikari-cp.core :as hikari]
             [schema.core :as s]
-            [palikka.core :refer [injections]]
             [schema-tools.core :as st]))
 
 (s/defschema Config
@@ -10,12 +9,10 @@
          :port-number s/Num
          s/Keyword s/Str))
 
-(defrecord Database [db]
+(defrecord Database [config db]
   component/Lifecycle
   (start [this]
-    (let [{:keys [config]} (injections this)
-          {:keys [server-name port-number] :as c}
-          (s/validate Config config)]
+    (let [{:keys [server-name port-number] :as c} Config]
       (println (format "Connecting to database on %s:%s" server-name port-number))
       (assoc this :db {:datasource (hikari/make-datasource c)})))
   (stop [this]
@@ -24,5 +21,6 @@
       (.shutdown ds))
     (assoc this :db nil)))
 
-(defn create []
-  (map->Database {}))
+(s/defn ^:always-validate create
+  [config :- Config]
+  (map->Database {:config config}))

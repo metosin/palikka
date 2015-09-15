@@ -1,6 +1,5 @@
 (ns palikka.example.db
-  (:require [com.stuartsierra.component :as component]
-            [palikka.core :refer [injections]]))
+  (:require [com.stuartsierra.component :as component]))
 
 (defrecord Db [db]
   component/Lifecycle
@@ -10,5 +9,5 @@
     (assoc this :db nil)))
 
 (defn create
-  []
-  (map->Db {}))
+  [config]
+  (map->Db {:config config}))

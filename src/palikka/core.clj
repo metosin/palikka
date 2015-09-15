@@ -49,26 +49,3 @@
         context))
     {}
     (vals system)))
-
-(def +injections+ ::injections)
-
-(defn injecting
-  [component spec]
-  (vary-meta
-    component
-    update-in [+injections+] (fnil merge {})
-    (cond
-      (map? spec) spec
-
-      :else
-      (throw (ex-info "Injections spec must be a map"
-                      {:reason ::invalid-injections-spec
-                       :component component
-                       :dependencies spec})) )))
-
-(defn injections
-  [component]
-  (reduce-kv (fn [acc k x]
-               (assoc acc k (-get x component)))
-             {}
-             (+injections+ (meta component))))

@@ -1,27 +1,23 @@
 (ns palikka.example.system
-  (:require [com.stuartsierra.component :as component :refer [using]]
-            [palikka.core :refer [providing injecting]]
+  (:require [maailma.core :refer [read-config!]]
+            [palikka.sweet :refer [system-map providing using]]
             [palikka.components.env :as env]
             [palikka.components.http-kit :as http-kit]
             [palikka.components.handler :as handler]
             [palikka.example.db :as db]))
 
-(defn base-system [config]
-  (component/system-map
-    :env         (-> (env/create "example" config)
-                     ; provides spec: using vector
-                     (providing [:config]))
-    :db          (-> (db/create)
-                     (using [:env])
-                     ; injections spec: using function
-                     ; Note: references the system / component directly, maybe
-                     ; should go through provides?
-                     (injecting {:config #(-> % :env :config :db)})
-                     ; provides spec: map
-                     (providing {:db :db, :gfs :gfs}))
-    :handler     (-> (handler/create 'palikka.example.handler/app)
-                     (using [:env :db]))
-    :http-kit    (-> (http-kit/create)
-                     (using [:env :handler])
-                     ; injections spec: using keyword vector
-                     (injecting {:config [:env :config :http]}))))
+(defn base-system
+  ([] (base-system nil))
+  ([override]
+   (let [env (read-config! "palikka" override)]
+     (system-map
+       ; Env component is available so that the configuration map is available from
+       ; system, e.g. for http handlers.
+       :env         (-> (env/create env)
+                        (providing {:config :config}))
+       :db          (-> (db/create (:db env))
+                        (providing {:db :db}))
+       :handler     (-> (handler/create 'palikka.example.handler/app)
+                        (using [:db]))
+       :http-kit    (-> (http-kit/create (:http env))
+                        (using [:handler]))))))

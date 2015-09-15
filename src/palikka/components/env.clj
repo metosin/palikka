@@ -1,14 +1,13 @@
 (ns palikka.components.env
-  (:require [com.stuartsierra.component :as component]
-            [maailma.core :refer [read-config!]]))
+  "Wraps static config value inside a component."
+  (:require [com.stuartsierra.component :as component]))
 
-(defrecord Env [prefix config override]
+(defrecord Env [config]
   component/Lifecycle
   (start [this]
-    (assoc this :config (read-config! prefix override)))
+    this)
   (stop [this]
-    (assoc this :config nil)))
+    this))
 
-(defn create [prefix override]
-  (map->Env {:prefix prefix
-             :override override}))
+(defn create [config]
+  (map->Env {:config config}))

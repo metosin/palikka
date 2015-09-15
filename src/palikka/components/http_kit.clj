@@ -1,24 +1,23 @@
 (ns palikka.components.http-kit
   (:require [org.httpkit.server :as http-kit]
             [com.stuartsierra.component :as component]
-            [palikka.core :refer [injections]]
             [schema.core :as s]))
 
 (s/defschema Config
-  {:port s/Num
+  {(s/optional-key :port) s/Num
+   (s/optional-key :ip) s/Str
    s/Keyword s/Any})
 
-(defrecord Http-kit [handler]
+(defrecord Http-kit [config handler]
   component/Lifecycle
   (start [this]
-    (let [{:keys [config]} (injections this)
-          config (s/validate Config config)]
-      (println "Starting http-kit on port" (:port config))
-      (assoc this :http-kit (http-kit/run-server (:handler handler) config))))
+    (println (format "Http-kit listening at http://%s:%d" (or (:ip config) "0.0.0.0") (or (:port config) 8090)))
+    (assoc this :http-kit (http-kit/run-server (:handler handler) config)))
   (stop [this]
     (if-let [http-kit (:http-kit this)]
       (http-kit))
     (assoc this :http-kit nil)))
 
-(defn create []
-  (map->Http-kit {}))
+(s/defn ^:always-validate create
+  [config :- Config]
+  (map->Http-kit {:config config}))
