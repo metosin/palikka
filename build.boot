@@ -4,17 +4,17 @@
 
 (def modules
   {:core     {}
-   :database {:dependencies '[[hikari-cp "1.2.4"]]}
+   :database {:dependencies '[[hikari-cp "1.3.1"]]}
    :flyway   {:dependencies '[[org.flywaydb/flyway-core "3.2.1"]]}
    :http-kit {:dependencies '[[http-kit "2.1.19"]]}
-   :mongo    {:dependencies '[[com.novemberain/monger "2.1.0"]]}
+   :mongo    {:dependencies '[[com.novemberain/monger "3.0.0"]]}
    :env      {:dependencies '[[metosin/maailma "0.1.0-SNAPSHOT"]]}})
 
 (set-env!
   :resource-paths #{"src"}
   :dependencies '[[org.clojure/clojure        "1.7.0" :scope "test"]
-                  [prismatic/schema           "0.4.4"]
-                  [metosin/schema-tools       "0.4.3"]
+                  [prismatic/schema           "1.0.1"]
+                  [metosin/schema-tools       "0.6.0"]
                   [com.stuartsierra/component "0.2.3"]])
 
 (defn filter-fileset [fileset p]
