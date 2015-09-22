@@ -18,7 +18,6 @@
     (:body (client/get "http://localhost:9999")) => "hello world"))
 
 (facts context
-  (:config (ctx)) => map?
   (instance? clojure.lang.Atom (:db (ctx))) => truthy)
 
 (facts system-test-2

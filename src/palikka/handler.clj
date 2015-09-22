@@ -5,3 +5,7 @@
   (let [c (palikka/create-context system)]
     (fn [req]
       (handler (assoc req :palikka/context c)))))
+
+(defn wrap-env [handler env]
+  (fn [req]
+    (handler (assoc req :palikka/env env))))

@@ -17,7 +17,6 @@
          (:body (client/get "http://localhost:9999")))))
 
 (deftest context-test
-  (is (map? (:config (ctx))))
   (is (instance? clojure.lang.Atom (:db (ctx)))))
 
 (comment

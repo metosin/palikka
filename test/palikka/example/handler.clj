@@ -2,4 +2,4 @@
 
 (defn app [req]
   {:status 200
-   :body (-> req :palikka/context :config :test)})
+   :body (-> req :palikka/env :test)})
