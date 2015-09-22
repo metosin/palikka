@@ -2,8 +2,7 @@
   (:require [org.httpkit.server :as http-kit]
             [com.stuartsierra.component :as component]
             [schema.core :as s]
-            [clojure.tools.logging :refer [info]]
-            [palikka.handler :refer [wrap-context]]))
+            [clojure.tools.logging :refer [info]]))
 
 (s/defschema Config
   {(s/optional-key :port) s/Num
@@ -14,7 +13,8 @@
   component/Lifecycle
   (start [this]
     (info (format "Http-kit listening at http://%s:%d" (or (:ip config) "0.0.0.0") (or (:port config) 8090)))
-    (assoc this :http-kit (http-kit/run-server (wrap-context handler this) config)))
+    (let [handler (handler this)]
+      (assoc this :http-kit (http-kit/run-server handler config))))
   (stop [this]
     (when http-kit
       (http-kit))
