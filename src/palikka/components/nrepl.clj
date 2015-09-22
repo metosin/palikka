@@ -1,7 +1,8 @@
 (ns palikka.components.nrepl
   (:require [clojure.tools.nrepl.server :as nrepl]
             [com.stuartsierra.component :as component]
-            [schema.core :as s]))
+            [schema.core :as s]
+            [clojure.tools.logging :refer [info]]))
 
 (s/defschema Config
   {:port s/Num
@@ -11,7 +12,7 @@
   component/Lifecycle
   (start [this]
     (let [{:keys [port]} config]
-      (println "Starting nrepl on port" port)
+      (info (format "Starting nrepl server on nrepl://%s:%s" "localhost" port))
       (assoc this :nrepl (nrepl/start-server :port port))))
   (stop [this]
     (if-let [nrepl (:nrepl this)] (nrepl/stop-server nrepl))

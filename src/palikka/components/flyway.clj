@@ -1,7 +1,8 @@
 (ns palikka.components.flyway
   "Checks the migration status when starting the system
    so you'll know when to run migration function."
-  (:require [com.stuartsierra.component :as component])
+  (:require [com.stuartsierra.component :as component]
+            [clojure.tools.logging :refer [warn]])
   (:import [org.flywaydb.core Flyway]
            [org.flywaydb.core.api FlywayException]))
 
@@ -21,9 +22,9 @@
           info (.info flyway)
           pending (map bean (.pending info))]
       (if (seq pending)
-        (println (str "WARNING: " (count pending) " migrations pending!"))))
+        (warn (str "WARNING: " (count pending) " migrations pending!"))))
     (catch FlywayException e
-      (println "WARNING: There were problems checking the migration status!" (.getMessage e)))))
+      (warn "WARNING: There were problems checking the migration status!" (.getMessage e)))))
 
 (defrecord CheckFlyway [db schemas]
   component/Lifecycle

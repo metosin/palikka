@@ -1,7 +1,8 @@
 (ns palikka.components.http-kit
   (:require [org.httpkit.server :as http-kit]
             [com.stuartsierra.component :as component]
-            [schema.core :as s]))
+            [schema.core :as s]
+            [clojure.tools.logging :refer [info]]))
 
 (s/defschema Config
   {(s/optional-key :port) s/Num
@@ -11,7 +12,7 @@
 (defrecord Http-kit [config handler]
   component/Lifecycle
   (start [this]
-    (println (format "Http-kit listening at http://%s:%d" (or (:ip config) "0.0.0.0") (or (:port config) 8090)))
+    (info (format "Http-kit listening at http://%s:%d" (or (:ip config) "0.0.0.0") (or (:port config) 8090)))
     (assoc this :http-kit (http-kit/run-server (:handler handler) config)))
   (stop [this]
     (if-let [http-kit (:http-kit this)]

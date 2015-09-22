@@ -1,7 +1,8 @@
 (ns palikka.components.mongo
   (:require [monger.core :as m]
             [com.stuartsierra.component :as component]
-            [schema.core :as s]))
+            [schema.core :as s]
+            [clojure.tools.logging :refer [info]]))
 
 (s/defschema Config
   {:url String})
@@ -11,7 +12,7 @@
   (start [this]
     (let [{:keys [url]}     config
           {:keys [conn db]} (m/connect-via-uri url)]
-      (println (format "Connected to mongo on %s" url))
+      (info (format "Connected to mongo at %s" url))
       (assoc this
              :conn conn
              :db db
