@@ -17,7 +17,7 @@
       (info (format "Connecting to database on %s:%s" server-name port-number))
       (assoc this :db {:datasource (hikari/make-datasource c)})))
   (stop [this]
-    (when-let [ds (-> this :db :datasource)]
+    (when-let [ds (:datasource db)]
       (hikari/close-datasource ds)
       (.shutdown ds))
     (assoc this :db nil)))

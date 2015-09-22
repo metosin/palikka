@@ -8,14 +8,15 @@
   {:port s/Num
    s/Keyword s/Any})
 
-(defrecord Nrepl [config]
+(defrecord Nrepl [config nrepl]
   component/Lifecycle
   (start [this]
     (let [{:keys [port]} config]
       (info (format "Starting nrepl server on nrepl://%s:%s" "localhost" port))
       (assoc this :nrepl (nrepl/start-server :port port))))
   (stop [this]
-    (if-let [nrepl (:nrepl this)] (nrepl/stop-server nrepl))
+    (when nrepl
+      (nrepl/stop-server nrepl))
     (assoc this :nrepl nil)))
 
 (s/defn ^:always-validate create

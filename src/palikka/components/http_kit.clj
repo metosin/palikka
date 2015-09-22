@@ -10,13 +10,13 @@
    (s/optional-key :ip) s/Str
    s/Keyword s/Any})
 
-(defrecord Http-kit [config handler]
+(defrecord Http-kit [config handler http-kit]
   component/Lifecycle
   (start [this]
     (info (format "Http-kit listening at http://%s:%d" (or (:ip config) "0.0.0.0") (or (:port config) 8090)))
     (assoc this :http-kit (http-kit/run-server (wrap-context handler this) config)))
   (stop [this]
-    (if-let [http-kit (:http-kit this)]
+    (when http-kit
       (http-kit))
     (assoc this :http-kit nil)))
 

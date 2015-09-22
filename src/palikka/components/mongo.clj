@@ -18,7 +18,7 @@
              :db db
              :gfs (m/get-gridfs conn (.getName db)))))
   (stop [this]
-    (if conn
+    (when conn
       (m/disconnect conn))
     (assoc this :conn nil :db nil :gfs nil)))
 
