@@ -49,3 +49,24 @@
         context))
     {}
     (vals system)))
+
+(extend-protocol component/Lifecycle
+  clojure.lang.IPersistentMap
+  (start [this]
+    ((:start this)))
+  (stop [this]
+    ((:stop this))))
+
+(defn http-component [state config]
+  {:start (fn []
+            (println "start" config)
+            (http-component {:running true} config))
+   :stop (fn []
+           (if-not (:running state)
+             (println "trying to stop not running http-server")
+             (println "stop" config))
+           (http-component nil config))})
+
+(comment
+  (component/stop (component/start (http-component nil {:port 8080})))
+  (component/stop (http-component nil {:port 8080})))
