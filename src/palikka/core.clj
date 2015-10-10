@@ -53,20 +53,33 @@
 (extend-protocol component/Lifecycle
   clojure.lang.IPersistentMap
   (start [this]
-    ((:start this)))
+    ((::start this) this))
   (stop [this]
-    ((:stop this))))
+    ((::stop this) this)))
 
-(defn http-component [state config]
-  {:start (fn []
-            (println "start" config)
-            (http-component {:running true} config))
-   :stop (fn []
-           (if-not (:running state)
-             (println "trying to stop not running http-server")
-             (println "stop" config))
-           (http-component nil config))})
+(defn http-component
+  ([config] (http-component nil config))
+  ([state config]
+   {; Publish parts of config or state for others to use
+    :name (:name config)
+    :server (:server state)
+    ::start (fn [this]
+             (println "start" (:name config))
+             (if-let [o (:other this)]
+               (println (:name config) "uses" (:name o)))
+             (http-component {:server "foo"} config))
+    ::stop (fn [this]
+            (if-not (:server state)
+              (println "trying to stop not running http-server")
+              (println "stop" (:name config)))
+            (http-component nil config))}))
 
 (comment
-  (component/stop (component/start (http-component nil {:port 8080})))
-  (component/stop (http-component nil {:port 8080})))
+  (component/stop (component/start (http-component {:port 8080})))
+  (component/stop (http-component {:port 8080}))
+
+  (component/stop
+    (component/start
+      (component/system-map
+        :a (http-component {:name :a :port 8080})
+        :b (component/using (http-component {:name :b :port 8080}) {:other :a})))))
