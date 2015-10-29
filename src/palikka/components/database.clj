@@ -13,7 +13,7 @@
 (defrecord Database [config db]
   component/Lifecycle
   (start [this]
-    (let [{:keys [server-name port-number] :as c} Config]
+    (let [{:keys [server-name port-number] :as c} config]
       (info (format "Connecting to database on %s:%s" server-name port-number))
       (assoc this :db {:datasource (hikari/make-datasource c)})))
   (stop [this]
