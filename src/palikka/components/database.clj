@@ -19,7 +19,7 @@
   (stop [this]
     (when-let [ds (:datasource db)]
       (hikari/close-datasource ds)
-      (.shutdown ds))
+      (.close ds))
     (assoc this :db nil)))
 
 (s/defn ^:always-validate create
