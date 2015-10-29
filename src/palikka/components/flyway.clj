@@ -2,37 +2,52 @@
   "Checks the migration status when starting the system
    so you'll know when to run migration function."
   (:require [com.stuartsierra.component :as component]
-            [clojure.tools.logging :refer [warn]])
+            [clojure.tools.logging :refer [warn]]
+            [schema.core :as s])
   (:import [org.flywaydb.core Flyway]
            [org.flywaydb.core.api FlywayException]))
 
-;; TODO: create clj-flyway
+(s/defschema Config {:schemas [s/Str]
+                     :locations [s/Str]})
 
-(defn ->Flyway [ds schemas]
+(defn ->Flyway [ds {:keys [schemas locations]}]
   (doto (Flyway.)
     (.setDataSource ds)
     (.setSchemas    (into-array String schemas))
-    (.setLocations  (into-array String ["/db/migration"]))))
+    (.setLocations  (into-array String (or locations ["/db/migration"])))))
+
+(defn migrate!
+  "Runs migrations"
+  [flyway]
+  (try
+    (.migrate flyway)
+    (catch FlywayException e
+      (warn "WARNING: There were problems running the migrations!" (.getMessage e)))))
 
 (defn check-migration-status!
   "Checks if there are pending migrations."
-  [ds schemas]
+  [flyway]
   (try
-    (let [flyway (->Flyway ds schemas)
-          info (.info flyway)
+    (let [info (.info flyway)
           pending (map bean (.pending info))]
       (if (seq pending)
         (warn (str "WARNING: " (count pending) " migrations pending!"))))
     (catch FlywayException e
       (warn "WARNING: There were problems checking the migration status!" (.getMessage e)))))
 
-(defrecord CheckFlyway [db schemas]
+(defrecord FlywayComponent [db opts migrate?]
   component/Lifecycle
   (start [this]
-    (check-migration-status! (-> db :db :datasource) schemas)
+    (let [flyway (->Flyway (-> db :db :datasource) opts)]
+      (if migrate?
+        (migrate! flyway)
+        (check-migration-status! flyway)))
     this)
   (stop [this]
     this))
 
-(defn check-flyway [{:keys [schemas]}]
-  (map->CheckFlyway {:schemas schemas}))
+(s/defn check [opts :- Config]
+  (map->FlywayComponent {:opts opts}))
+
+(s/defn migrate [opts :- Config]
+  (map->FlywayComponent {:opts opts :migrate? true}))
