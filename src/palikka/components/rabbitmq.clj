@@ -5,8 +5,6 @@
             [langohr.core :as rmq])
   (:import [com.rabbitmq.client Connection]))
 
-(set! *warn-on-reflection* true)
-
 (defrecord RabbitMQ [^Connection mq config]
   component/Lifecycle
   (start [this]

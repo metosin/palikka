@@ -18,8 +18,7 @@
       (assoc this :db {:datasource (hikari/make-datasource c)})))
   (stop [this]
     (when-let [ds (:datasource db)]
-      (hikari/close-datasource ds)
-      (.close ds))
+      (hikari/close-datasource ds))
     (assoc this :db nil)))
 
 (s/defn ^:always-validate create

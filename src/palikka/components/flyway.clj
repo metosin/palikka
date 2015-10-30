@@ -18,7 +18,7 @@
 
 (defn migrate!
   "Runs migrations"
-  [flyway]
+  [^Flyway flyway]
   (try
     (.migrate flyway)
     (catch FlywayException e
@@ -26,7 +26,7 @@
 
 (defn check-migration-status!
   "Checks if there are pending migrations."
-  [flyway]
+  [^Flyway flyway]
   (try
     (let [info (.info flyway)
           pending (map bean (.pending info))]
