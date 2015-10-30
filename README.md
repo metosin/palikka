@@ -18,6 +18,12 @@
 
 - Integrated with [maailma](https://github.com/metosin/maailma) envinronment lib, provides Schemas etc.
 
+## Differences to [System](https://github.com/danielsz/system)
+
+- Components log messages
+- **Context**
+- Schema validation for options
+
 ## Component dependencies
 
 This library doesn't depend on libraries used by components,
