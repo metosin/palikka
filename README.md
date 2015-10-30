@@ -16,8 +16,6 @@
     - `(providing (mongo/create (:db env)) {:mongo :db})` will publish value of `(:db mongo)` as `(:mongo context)`
     - `(providing (mongo/create (:db env)) {:mongo (fn [component] (:db component))})` will publish value of `(:db mongo)` as `(:mongo context)`
 
-- Integrated with [maailma](https://github.com/metosin/maailma) envinronment lib, provides Schemas etc.
-
 ## Differences to [System](https://github.com/danielsz/system)
 
 - Components log messages
