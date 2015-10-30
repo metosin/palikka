@@ -32,6 +32,7 @@
                                   [postgresql/postgresql "9.3-1102.jdbc41"]
                                   [org.flywaydb/flyway-core "3.2.1"]
                                   [org.clojure/tools.nrepl "0.2.10"]
+                                  [com.datomic/datomic-free "0.9.5327"]
                                   [com.novemberain/langohr "3.4.1"]
 
                                   ; Logging
