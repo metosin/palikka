@@ -2,7 +2,8 @@
   (:require [com.stuartsierra.component :as component]
             [clojure.tools.logging :as log]
             [schema.core :as s]
-            [datomic.api :as d]))
+            [datomic.api :as d]
+            [palikka.coerce :as c]))
 
 (s/defschema Config
   {:uri s/Str})
@@ -17,5 +18,5 @@
   (stop [component]
     (assoc component :conn nil :db nil)))
 
-(s/defn ^:always-validate create [config :- Config]
-  (map->Datomic {:config config}))
+(defn create [config]
+  (map->Datomic {:config (c/env-coerce Config config)}))

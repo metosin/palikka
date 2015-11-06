@@ -2,10 +2,11 @@
   (:require [clojure.tools.nrepl.server :as nrepl]
             [com.stuartsierra.component :as component]
             [schema.core :as s]
-            [clojure.tools.logging :refer [info]]))
+            [clojure.tools.logging :refer [info]]
+            [palikka.coerce :as c]))
 
 (s/defschema Config
-  {:port s/Num
+  {:port s/Int
    s/Keyword s/Any})
 
 (defrecord Nrepl [config nrepl]
@@ -19,6 +20,5 @@
       (nrepl/stop-server nrepl))
     (assoc this :nrepl nil)))
 
-(s/defn ^:always-validate create
-  [config :- Config]
-  (map->Nrepl {:config config}))
+(defn create [config]
+  (map->Nrepl {:config (c/env-coerce Config config)}))

@@ -3,7 +3,8 @@
             [hikari-cp.core :as hikari]
             [schema.core :as s]
             [schema-tools.core :as st]
-            [clojure.tools.logging :refer [info]]))
+            [clojure.tools.logging :refer [info]]
+            [palikka.coerce :as c]))
 
 (s/defschema Config
   (assoc (st/optional-keys hikari/ConfigurationOptions)
@@ -21,6 +22,5 @@
       (hikari/close-datasource ds))
     (assoc this :db nil)))
 
-(s/defn ^:always-validate create
-  [config :- Config]
-  (map->Database {:config config}))
+(defn create [config]
+  (map->Database {:config (c/env-coerce Config config)}))

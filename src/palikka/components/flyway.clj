@@ -3,7 +3,8 @@
    so you'll know when to run migration function."
   (:require [com.stuartsierra.component :as component]
             [clojure.tools.logging :refer [warn]]
-            [schema.core :as s])
+            [schema.core :as s]
+            [palikka.coerce :as c])
   (:import [org.flywaydb.core Flyway]
            [org.flywaydb.core.api FlywayException]))
 
@@ -46,8 +47,8 @@
   (stop [this]
     this))
 
-(s/defn check [opts :- Config]
-  (map->FlywayComponent {:opts opts}))
+(defn check [opts]
+  (map->FlywayComponent {:opts (c/env-coerce Config opts)}))
 
-(s/defn migrate [opts :- Config]
-  (map->FlywayComponent {:opts opts :migrate? true}))
+(defn migrate [opts]
+  (map->FlywayComponent {:opts (c/env-coerce Config opts) :migrate? true}))

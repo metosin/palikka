@@ -2,10 +2,11 @@
   (:require [org.httpkit.server :as http-kit]
             [com.stuartsierra.component :as component]
             [schema.core :as s]
-            [clojure.tools.logging :refer [info]]))
+            [clojure.tools.logging :refer [info]]
+            [palikka.coerce :as c]))
 
 (s/defschema Config
-  {(s/optional-key :port) s/Num
+  {(s/optional-key :port) s/Int
    (s/optional-key :ip) s/Str
    s/Keyword s/Any})
 
@@ -20,6 +21,6 @@
       (http-kit))
     (assoc this :http-kit nil)))
 
-(s/defn ^:always-validate create
-  [config :- Config handler]
-  (map->Http-kit {:config config :handler handler}))
+(defn create
+  [config handler]
+  (map->Http-kit {:config (c/env-coerce Config config) :handler handler}))

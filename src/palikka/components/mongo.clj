@@ -2,7 +2,8 @@
   (:require [monger.core :as m]
             [com.stuartsierra.component :as component]
             [schema.core :as s]
-            [clojure.tools.logging :refer [info]]))
+            [clojure.tools.logging :refer [info]]
+            [palikka.coerce :as c]))
 
 (s/defschema Config
   {:url String})
@@ -22,7 +23,5 @@
       (m/disconnect conn))
     (assoc this :conn nil :db nil :gfs nil)))
 
-(s/defn create
-  ^:always-validate
-  [config :- Config]
-  (map->Mongo {:config config}))
+(s/defn create [config]
+  (map->Mongo {:config (c/env-coerce Config config)}))
