@@ -48,10 +48,6 @@ depend on these on your project.
 - RabbitMQ: [Langohr](https://github.com/michaelklishin/langohr)
 - Datomic: `[com.datomic/datomic-free "0.9.5327"]` or Datomic Pro
 
-## Todo
-
-- [ ] Jetty
-
 ## License
 
 Copyright © 2015 [Metosin Oy](http://www.metosin.fi)
