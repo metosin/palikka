@@ -8,7 +8,6 @@
   :dependencies [[potemkin "0.4.1"]
                  [org.clojure/tools.logging "0.3.1"]
                  [prismatic/schema "1.0.3"]
-                 [metosin/maailma "0.1.0-SNAPSHOT"]
                  [metosin/schema-tools "0.6.2"]
                  [com.stuartsierra/component "0.3.0"]]
   :plugins [[codox "0.8.10"]]
@@ -24,6 +23,7 @@
                                   [midje "1.8.1"]
                                   [clj-http "2.0.0"]
                                   [reloaded.repl "0.2.1"]
+                                  [metosin/maailma "0.2.0-SNAPSHOT"]
 
                                   ; Components
                                   [com.novemberain/monger "3.0.1"]

@@ -1,5 +1,5 @@
 (ns palikka.example.system
-  (:require [maailma.core :refer [read-config!]]
+  (:require [maailma.core :as m]
             [palikka.sweet :refer [system-map providing using]]
             [palikka.components.http-kit :as http-kit]
             [palikka.example.db :as db]
@@ -9,7 +9,9 @@
 (defn base-system
   ([] (base-system nil))
   ([override]
-   (let [env (read-config! "palikka" override)
+   (let [env (m/build-config
+               (m/resource "config-defaults.edn")
+               override)
          create-handler (fn [system]
                           (-> (create-handler system)
                               (wrap-context system)
