@@ -13,5 +13,5 @@
   (is (= {:ssl? true} (env-coerce Config {:ssl? "true"})))
   (is (= {:schemas ["flyway" "app"]} (env-coerce Config {:schemas "flyway:app"})))
   (is (= {:ports [123 234]} (env-coerce Config {:ports "123:234"})))
-  (is (thrown-with-msg? clojure.lang.ExceptionInfo #"Component options validation failed"
+  (is (thrown-with-msg? IllegalArgumentException #"Component options validation failed: "
                         (env-coerce Config {:port :3000}))))

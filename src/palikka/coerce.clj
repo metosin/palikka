@@ -32,5 +32,5 @@
   (let [coercer (env-coercer schema)
         result (coercer v)]
     (if (su/error? result)
-      (throw (ex-info "Component options validation failed" (su/error-val result)))
+      (throw (IllegalArgumentException. (str "Component options validation failed: " (pr-str (su/error-val result)))))
       result)))
