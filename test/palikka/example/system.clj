@@ -19,6 +19,6 @@
      (system-map
        :db          (-> (db/create (:db env))
                         (providing {:db :db}))
-       :http-kit    (-> (http-kit/create (:http env) create-handler)
+       :http-kit    (-> (http-kit/create (:http env) {:fn create-handler})
                         ; For wrap-context
                         (using [:db]))))))
