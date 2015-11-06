@@ -5,8 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"
             :distribution :repo
             :comments "same as Clojure"}
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [potemkin "0.4.1"]
+  :dependencies [[potemkin "0.4.1"]
                  [org.clojure/tools.logging "0.3.1"]
                  [prismatic/schema "1.0.3"]
                  [metosin/maailma "0.1.0-SNAPSHOT"]
@@ -21,7 +20,8 @@
                              [lein-midje "3.2"]]
                    :source-paths ["examples"]
                    :resource-paths ["test-resources"]
-                   :dependencies [[midje "1.8.1"]
+                   :dependencies [[org.clojure/clojure "1.7.0"]
+                                  [midje "1.8.1"]
                                   [clj-http "2.0.0"]
                                   [reloaded.repl "0.2.1"]
 
