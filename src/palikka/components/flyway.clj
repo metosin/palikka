@@ -1,6 +1,4 @@
 (ns palikka.components.flyway
-  "Checks the migration status when starting the system
-   so you'll know when to run migration function."
   (:require [com.stuartsierra.component :as component]
             [clojure.tools.logging :refer [warn]]
             [schema.core :as s]
@@ -47,8 +45,13 @@
   (stop [this]
     this))
 
-(defn check [opts]
+(defn check
+  "Checks the migration status when starting the system
+  so you'll know when to run the migrations."
+  [opts]
   (map->FlywayComponent {:opts (c/env-coerce Config opts)}))
 
-(defn migrate [opts]
+(defn migrate
+  "Runs the migrations."
+  [opts]
   (map->FlywayComponent {:opts (c/env-coerce Config opts) :migrate? true}))
