@@ -18,6 +18,9 @@ don't expect full support.
 ## Features
 
 - The components use [clojure.tools.logging](https://github.com/clojure/tools.logging)
+- The components use Schema to validate and coerce their configuration
+    - Coercion allows using strings from environment variables and system
+    properties easily
 - Includes [test utilities](./src/palikka/test_utils.clj) for `clojure.test` and Midje.
 - **Context** is curated value created from interesting parts of the system.
     - Passing the whole system down to implementation is inconvenient as the
@@ -31,7 +34,7 @@ don't expect full support.
 
 - Components log messages
 - **Context**
-- Schema validation for options
+- Schema validation and coercion for options
 
 ## Component dependencies
 
