@@ -31,7 +31,7 @@
                                   [http-kit "2.1.19"]
                                   [postgresql/postgresql "9.3-1102.jdbc41"]
                                   [org.flywaydb/flyway-core "3.2.1"]
-                                  [org.clojure/tools.nrepl "0.2.11"]
+                                  [org.clojure/tools.nrepl "0.2.12"]
                                   [com.datomic/datomic-free "0.9.5327" :exclusions [org.slf4j/slf4j-nop joda-time]]
                                   [com.novemberain/langohr "3.4.1"]
 
