@@ -10,10 +10,9 @@
                  [prismatic/schema "1.0.3"]
                  [metosin/schema-tools "0.6.2"]
                  [com.stuartsierra/component "0.3.0"]]
-  :plugins [[codox "0.8.10"]]
+  :plugins [[lein-codox "0.9.0"]]
 
-  :codox {:src-dir-uri "http://github.com/metosin/palikka/blob/master/"
-          :src-linenum-anchor-prefix "L"}
+  :codox {:source-uri "http://github.com/metosin/palikka/blob/master/{filepath}#L{line}"}
 
   :profiles {:dev {:plugins [[jonase/eastwood "0.2.1"]
                              [lein-midje "3.2"]]
