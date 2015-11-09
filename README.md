@@ -38,6 +38,26 @@ don't expect full support.
 - **Context**
 - Schema validation and coercion for options
 
+## Example
+
+```clj
+(defn base-system [override]
+  (let [env (m/build-config
+              (m/resource "config-defaults.edn")
+              (m/file "./config-local.edn"))
+        create-handler (fn [system]
+                         (-> (create-handler system)
+                             (wrap-context system)))]
+    (component/system-map
+      :mongo        (-> (mongo/create (:mongo env))
+                        (providing {:db :db, :gfs :gfs}))
+      :http         (-> (http-kit/create (:http env) {:fn create-handler})
+                        ; Though components are accessed through context,
+                        ; complete system map is needed for creating the context
+                        (using [:mongo]))
+      :nrepl        (nrepl/create (:nrepl env)))))
+```
+
 ## Component dependencies
 
 This library doesn't depend on libraries used by components,
