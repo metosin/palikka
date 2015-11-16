@@ -11,13 +11,15 @@
 (defrecord Mongo [config conn db gfs]
   component/Lifecycle
   (start [this]
-    (let [{:keys [url]}     config
-          {:keys [conn db]} (m/connect-via-uri url)]
+    (let [{:keys [url]}     config]
       (info (format "Connected to mongo at %s" url))
-      (assoc this
-             :conn conn
-             :db db
-             :gfs (m/get-gridfs conn (.getName db)))))
+      (if-not conn
+        (let [{:keys [conn db]} (m/connect-via-uri url)]
+          (assoc this
+                 :conn conn
+                 :db db
+                 :gfs (m/get-gridfs conn (.getName db))))
+        this)))
   (stop [this]
     (when conn
       (m/disconnect conn))

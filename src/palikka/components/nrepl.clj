@@ -12,9 +12,11 @@
 (defrecord Nrepl [config nrepl]
   component/Lifecycle
   (start [this]
-    (let [{:keys [port]} config]
-      (info (format "Starting nrepl server on nrepl://%s:%s" "localhost" port))
-      (assoc this :nrepl (nrepl/start-server :port port))))
+    (if-not nrepl
+      (let [{:keys [port]} config]
+        (info (format "Starting nrepl server on nrepl://%s:%s" "localhost" port))
+        (assoc this :nrepl (nrepl/start-server :port port)))
+      this))
   (stop [this]
     (when nrepl
       (nrepl/stop-server nrepl))

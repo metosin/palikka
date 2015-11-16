@@ -20,7 +20,9 @@
   component/Lifecycle
   (start [this]
     (log/infof "Connecting to RabbitMQ on %s:%d" (:host config) (:port config))
-    (assoc this :mq (rmq/connect config)))
+    (if-not mq
+      (assoc this :mq (rmq/connect config))
+      this))
   (stop [this]
     (when (and mq (.isOpen mq))
       (log/info "Closing RabbitMQ connection")

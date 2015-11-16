@@ -14,10 +14,12 @@
   component/Lifecycle
   (start [this]
     (info (format "Http-kit listening at http://%s:%d" (or (:ip config) "0.0.0.0") (or (:port config) 8090)))
-    (let [handler (cond
-                    (map? handler) ((:fn handler) this)
-                    :else handler)]
-      (assoc this :http-kit (http-kit/run-server handler config))))
+    (if-not http-kit
+      (let [handler (cond
+                      (map? handler) ((:fn handler) this)
+                      :else handler)]
+        (assoc this :http-kit (http-kit/run-server handler config)))
+      this))
   (stop [this]
     (when http-kit
       (http-kit))
