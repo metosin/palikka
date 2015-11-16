@@ -31,6 +31,7 @@ don't expect full support.
     - `(providing (mongo/create (:db env)) {:mongo (fn [component] (:db component))})` will publish value of `(:db mongo)` as `(:mongo context)`
 - Ring handler can be created using a function taking `system` as argument. This makes it easy to create handler accessing system or context, directly or through middleware.
     - `(http-kit/create (:http env) {:fn (fn [system] (let [ctx (palikka.core/create-context system)] (fn [req] {:body ctx})))})`
+- [Idempotent components](https://github.com/stuartsierra/component#idempotence)
 
 ## Differences to [System](https://github.com/danielsz/system)
 
