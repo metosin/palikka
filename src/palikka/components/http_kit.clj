@@ -2,7 +2,7 @@
   (:require [org.httpkit.server :as http-kit]
             [com.stuartsierra.component :as component]
             [schema.core :as s]
-            [clojure.tools.logging :refer [info]]
+            [clojure.tools.logging :as log]
             [palikka.coerce :as c]))
 
 (s/defschema Config
@@ -13,7 +13,7 @@
 (defrecord Http-kit [config handler http-kit]
   component/Lifecycle
   (start [this]
-    (info (format "Http-kit listening at http://%s:%d" (or (:ip config) "0.0.0.0") (or (:port config) 8090)))
+    (log/infof "Http-kit listening at http://%s:%d" (or (:ip config) "0.0.0.0") (or (:port config) 8090))
     (if-not http-kit
       (let [handler (cond
                       (map? handler) ((:fn handler) this)

@@ -2,7 +2,7 @@
   (:require [monger.core :as m]
             [com.stuartsierra.component :as component]
             [schema.core :as s]
-            [clojure.tools.logging :refer [info]]
+            [clojure.tools.logging :as log]
             [palikka.coerce :as c]))
 
 (s/defschema Config
@@ -12,7 +12,7 @@
   component/Lifecycle
   (start [this]
     (let [{:keys [url]}     config]
-      (info (format "Connected to mongo at %s" url))
+      (log/infof "Connected to mongo at %s" url)
       (if-not conn
         (let [{:keys [conn db]} (m/connect-via-uri url)]
           (assoc this

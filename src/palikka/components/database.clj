@@ -3,7 +3,7 @@
             [hikari-cp.core :as hikari]
             [schema.core :as s]
             [schema-tools.core :as st]
-            [clojure.tools.logging :refer [info]]
+            [clojure.tools.logging :as log]
             [palikka.coerce :as c]))
 
 (s/defschema Config
@@ -15,7 +15,7 @@
   component/Lifecycle
   (start [this]
     (let [{:keys [server-name port-number] :as c} config]
-      (info (format "Connecting to database on %s:%s" server-name port-number))
+      (log/infof "Connecting to database on %s:%s" server-name port-number)
       (if-not db
         (assoc this :db {:datasource (hikari/make-datasource c)})
         this)))

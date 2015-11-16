@@ -2,7 +2,7 @@
   (:require [clojure.tools.nrepl.server :as nrepl]
             [com.stuartsierra.component :as component]
             [schema.core :as s]
-            [clojure.tools.logging :refer [info]]
+            [clojure.tools.logging :as log]
             [palikka.coerce :as c]))
 
 (s/defschema Config
@@ -14,7 +14,7 @@
   (start [this]
     (if-not nrepl
       (let [{:keys [port]} config]
-        (info (format "Starting nrepl server on nrepl://%s:%s" "localhost" port))
+        (log/infof "Starting nrepl server on nrepl://%s:%s" "localhost" port)
         (assoc this :nrepl (nrepl/start-server :port port)))
       this))
   (stop [this]
