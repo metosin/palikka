@@ -26,7 +26,10 @@
   (stop [this]
     (when (and mq (.isOpen mq))
       (log/info "Closing RabbitMQ connection")
-      (.close mq))
+      (try
+        (.close mq)
+        (catch Throwable t
+          (log/warn t "Error when closing RabbitMQ collection"))))
     (assoc this :mq nil)))
 
 (defn create [config]

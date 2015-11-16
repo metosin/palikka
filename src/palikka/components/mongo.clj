@@ -22,7 +22,10 @@
         this)))
   (stop [this]
     (when conn
-      (m/disconnect conn))
+      (try
+        (m/disconnect conn)
+        (catch Throwable t
+          (log/warn t "Error when closing Mongo connection"))))
     (assoc this :conn nil :db nil :gfs nil)))
 
 (s/defn create [config]

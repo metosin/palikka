@@ -22,7 +22,10 @@
       this))
   (stop [this]
     (when http-kit
-      (http-kit))
+      (try
+        (http-kit)
+        (catch Throwable t
+          (log/warn t "Error when stopping http-kit"))))
     (assoc this :http-kit nil)))
 
 (defn create

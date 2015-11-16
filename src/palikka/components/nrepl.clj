@@ -19,7 +19,10 @@
       this))
   (stop [this]
     (when nrepl
-      (nrepl/stop-server nrepl))
+      (try
+        (nrepl/stop-server nrepl)
+        (catch Throwable t
+          (log/warn t "Error when closing nrepl server"))))
     (assoc this :nrepl nil)))
 
 (defn create [config]

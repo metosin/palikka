@@ -21,7 +21,10 @@
         this)))
   (stop [this]
     (when-let [ds (:datasource db)]
-      (hikari/close-datasource ds))
+      (try
+        (hikari/close-datasource ds)
+        (catch Throwable t
+          (log/warn t "Error when closing JDBC connection"))))
     (assoc this :db nil)))
 
 (defn create [config]
