@@ -1,5 +1,6 @@
 (ns palikka.components.database
   (:require [com.stuartsierra.component :as component]
+            [suspendable.core :as suspendable]
             [hikari-cp.core :as hikari]
             [schema.core :as s]
             [schema-tools.core :as st]
@@ -25,7 +26,16 @@
         (hikari/close-datasource ds)
         (catch Throwable t
           (log/warn t "Error when closing JDBC connection"))))
-    (assoc this :db nil)))
+    (assoc this :db nil))
+
+  suspendable/Suspendable
+  (suspend [this]
+    this)
+  (resume [this old-component]
+    (if (= config (:config old-component))
+      (assoc this :db (:db old-component))
+      (do (component/stop old-component)
+          (component/start this)))))
 
 (defn create [config]
   (map->Database {:config (c/env-coerce Config config)}))

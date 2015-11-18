@@ -1,6 +1,7 @@
 (ns palikka.components.http-kit
   (:require [org.httpkit.server :as http-kit]
             [com.stuartsierra.component :as component]
+            [suspendable.core :as suspendable]
             [schema.core :as s]
             [clojure.tools.logging :as log]
             [palikka.coerce :as c]))
@@ -26,7 +27,16 @@
         (http-kit)
         (catch Throwable t
           (log/warn t "Error when stopping http-kit"))))
-    (assoc this :http-kit nil)))
+    (assoc this :http-kit nil))
+
+  suspendable/Suspendable
+  (suspend [this]
+    this)
+  (resume [this old-component]
+    (if (= config (:config old-component))
+      (assoc this :http-kit (:http-kit old-component))
+      (do (component/stop old-component)
+          (component/start this)))))
 
 (defn create
   "Create http-kit component. `handler` should be handler function, var

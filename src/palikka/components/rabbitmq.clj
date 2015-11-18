@@ -1,6 +1,7 @@
 (ns palikka.components.rabbitmq
   (:require [clojure.tools.logging :as log]
             [com.stuartsierra.component :as component]
+            [suspendable.core :as suspendable]
             [schema.core :as s]
             [langohr.core :as rmq]
             [palikka.coerce :as c])
@@ -30,7 +31,16 @@
         (.close mq)
         (catch Throwable t
           (log/warn t "Error when closing RabbitMQ collection"))))
-    (assoc this :mq nil)))
+    (assoc this :mq nil))
+
+  suspendable/Suspendable
+  (suspend [this]
+    this)
+  (resume [this old-component]
+    (if (= config (:config old-component))
+      (assoc this :mq (:mq old-component))
+      (do (component/stop old-component)
+          (component/start this)))))
 
 (defn create [config]
   (map->RabbitMQ {:config (c/env-coerce Config config)}))

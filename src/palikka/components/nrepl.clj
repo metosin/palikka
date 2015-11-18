@@ -1,6 +1,7 @@
 (ns palikka.components.nrepl
   (:require [clojure.tools.nrepl.server :as nrepl]
             [com.stuartsierra.component :as component]
+            [suspendable.core :as suspendable]
             [schema.core :as s]
             [clojure.tools.logging :as log]
             [palikka.coerce :as c]))
@@ -23,7 +24,16 @@
         (nrepl/stop-server nrepl)
         (catch Throwable t
           (log/warn t "Error when closing nrepl server"))))
-    (assoc this :nrepl nil)))
+    (assoc this :nrepl nil))
+
+  suspendable/Suspendable
+  (suspend [this]
+    this)
+  (resume [this old-component]
+    (if (= config (:config old-component))
+      (assoc this :nrepl (:nrepl old-component))
+      (do (component/stop old-component)
+          (component/start this)))))
 
 (defn create [config]
   (map->Nrepl {:config (c/env-coerce Config config)}))

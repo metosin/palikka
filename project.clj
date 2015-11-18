@@ -9,7 +9,8 @@
                  [org.clojure/tools.logging "0.3.1"]
                  [prismatic/schema "1.0.3"]
                  [metosin/schema-tools "0.6.2"]
-                 [com.stuartsierra/component "0.3.0"]]
+                 [com.stuartsierra/component "0.3.0"]
+                 [suspendable "0.1.0"]]
   :plugins [[lein-codox "0.9.0"]]
 
   :codox {:source-uri "http://github.com/metosin/palikka/blob/master/{filepath}#L{line}"}
