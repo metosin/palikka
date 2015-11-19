@@ -25,7 +25,10 @@
       this))
   (stop [this]
     (if aleph
-      (.close aleph))
+      (try
+        (.close aleph)
+        (catch Throwable t
+          (log/warn t "Error when stopping Aleph"))))
     (assoc this :aleph nil))
 
   suspendable/Suspendable
