@@ -34,6 +34,7 @@
                                   [org.clojure/tools.nrepl "0.2.12"]
                                   [com.datomic/datomic-free "0.9.5327" :exclusions [org.slf4j/slf4j-nop joda-time]]
                                   [com.novemberain/langohr "3.4.1"]
+                                  [aleph "0.4.1-beta2"]
 
                                   ; Logging
                                   [ch.qos.logback/logback-classic "1.1.3"]
