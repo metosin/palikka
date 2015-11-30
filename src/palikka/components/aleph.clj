@@ -13,10 +13,9 @@
 (defrecord Aleph [config handler aleph]
   component/Lifecycle
   (start [this]
-    (log/info "Aleph listening at "
-              (.getHostAddress (java.net.Inet4Address/getLocalHost))
-              ":"
-              (:port config))
+    (log/infof "Aleph listening at %s:%s"
+               (.getHostAddress (java.net.Inet4Address/getLocalHost))
+               (:port config))
     (if-not aleph
       (let [handler (cond
                       (map? handler) ((:fn handler) this)
