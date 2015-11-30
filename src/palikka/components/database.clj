@@ -1,6 +1,5 @@
 (ns palikka.components.database
   (:require [com.stuartsierra.component :as component]
-            [suspendable.core :as suspendable]
             [hikari-cp.core :as hikari]
             [schema.core :as s]
             [schema-tools.core :as st]
