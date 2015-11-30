@@ -26,16 +26,7 @@
         (hikari/close-datasource ds)
         (catch Throwable t
           (log/warn t "Error when closing JDBC connection"))))
-    (assoc this :db nil))
-
-  suspendable/Suspendable
-  (suspend [this]
-    this)
-  (resume [this old-component]
-    (if (= config (:config old-component))
-      (assoc this :db (:db old-component))
-      (do (component/stop old-component)
-          (component/start this)))))
+    (assoc this :db nil)))
 
 (defn create [config]
   (map->Database {:config (c/env-coerce Config config)}))
