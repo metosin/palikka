@@ -1,7 +1,6 @@
 (ns palikka.components.aleph
   (:require [aleph.http :as aleph]
             [com.stuartsierra.component :as component]
-            [suspendable.core :as suspendable]
             [schema.core :as s]
             [clojure.tools.logging :as log]
             [palikka.coerce :as c]))
@@ -28,16 +27,7 @@
         (.close aleph)
         (catch Throwable t
           (log/warn t "Error when stopping Aleph"))))
-    (assoc this :aleph nil))
-
-  suspendable/Suspendable
-  (suspend [this]
-    this)
-  (resume [this old-component]
-    (if (= config (:config old-component))
-      (assoc this :aleph (:aleph old-component))
-      (do (component/stop old-component)
-          (component/start this)))))
+    (assoc this :aleph nil)))
 
 (defn create
   "Create aleph component. `handler` should be handler function, a var
