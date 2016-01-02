@@ -10,15 +10,15 @@
    (s/optional-key :ip) s/Str
    s/Keyword s/Any})
 
-(defrecord Http-kit [config handler http-kit]
+(defrecord Http-kit [component-config component-handler http-kit]
   component/Lifecycle
   (start [this]
-    (log/infof "Http-kit listening at http://%s:%d" (or (:ip config) "0.0.0.0") (or (:port config) 8090))
+    (log/infof "Http-kit listening at http://%s:%d" (or (:ip component-config) "0.0.0.0") (or (:port component-config) 8090))
     (if-not http-kit
       (let [handler (cond
-                      (map? handler) ((:fn handler) this)
-                      :else handler)]
-        (assoc this :http-kit (http-kit/run-server handler config)))
+                     (map? component-handler) ((:fn component-handler) this)
+                     :else component-handler)]
+        (assoc this :http-kit (http-kit/run-server handler component-config)))
       this))
   (stop [this]
     (when http-kit
@@ -37,4 +37,4 @@
   {:pre [(or (fn? handler)
              (var? handler)
              (and (map? handler) (fn? (:fn handler))))]}
-  (map->Http-kit {:config (c/env-coerce Config config) :handler handler}))
+  (map->Http-kit {:component-config (c/env-coerce Config config) :component-handler handler}))

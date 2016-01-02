@@ -9,17 +9,15 @@
   {:port s/Int
    s/Keyword s/Any})
 
-(defrecord Aleph [config handler aleph]
+(defrecord Aleph [component-config component-handler aleph]
   component/Lifecycle
   (start [this]
-    (log/infof "Aleph listening at http://%s:%s"
-               "0.0.0.0"
-               (:port config))
+    (log/infof "Aleph listening at http://%s:%s" "0.0.0.0" (:port component-config))
     (if-not aleph
       (let [handler (cond
-                      (map? handler) ((:fn handler) this)
-                      :else handler)]
-        (assoc this :aleph (aleph/start-server handler config)))
+                     (map? component-handler) ((:fn component-handler) this)
+                     :else component-handler)]
+        (assoc this :aleph (aleph/start-server handler component-config)))
       this))
   (stop [this]
     (if aleph
@@ -38,4 +36,4 @@
   {:pre [(or (fn? handler)
              (var? handler)
              (and (map? handler) (fn? (:fn handler))))]}
-  (map->Aleph {:config (c/env-coerce Config config) :handler handler}))
+  (map->Aleph {:component-config (c/env-coerce Config config) :component-handler handler}))

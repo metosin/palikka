@@ -11,14 +11,13 @@
          :port-number s/Num
          s/Keyword s/Str))
 
-(defrecord Database [config db]
+(defrecord Database [component-config db]
   component/Lifecycle
   (start [this]
-    (let [{:keys [server-name port-number] :as c} config]
-      (log/infof "Connecting to database on %s:%s" server-name port-number)
-      (if-not db
-        (assoc this :db {:datasource (hikari/make-datasource c)})
-        this)))
+    (log/infof "Connecting to database on %s:%s" (:server-name component-config) (:port-number component-config))
+    (if-not db
+      (assoc this :db {:datasource (hikari/make-datasource component-config)})
+      this))
   (stop [this]
     (when-let [ds (:datasource db)]
       (try
@@ -28,4 +27,4 @@
     (assoc this :db nil)))
 
 (defn create [config]
-  (map->Database {:config (c/env-coerce Config config)}))
+  (map->Database {:component-config (c/env-coerce Config config)}))

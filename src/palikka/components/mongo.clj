@@ -9,10 +9,10 @@
 (s/defschema Config
   {:url String})
 
-(defrecord Mongo [config conn db gfs]
+(defrecord Mongo [component-config conn db gfs]
   component/Lifecycle
   (start [this]
-    (let [{:keys [url]}     config]
+    (let [{:keys [url]} component-config]
       (log/infof "Connected to mongo at %s" url)
       (if-not conn
         (let [{:keys [conn db]} (m/connect-via-uri url)]
@@ -33,7 +33,7 @@
   (suspend [this]
     this)
   (resume [this old-component]
-    (if (= config (:config old-component))
+    (if (= component-config (:component-config old-component))
       (assoc this
              :conn (:conn old-component)
              :db (:db old-component)
@@ -42,4 +42,4 @@
           (component/start this)))))
 
 (s/defn create [config]
-  (map->Mongo {:config (c/env-coerce Config config)}))
+  (map->Mongo {:component-config (c/env-coerce Config config)}))

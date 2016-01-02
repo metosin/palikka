@@ -9,13 +9,13 @@
 (s/defschema Config
   {:uri s/Str})
 
-(defrecord Datomic [config conn db]
+(defrecord Datomic [component-config conn db]
   component/Lifecycle
   (start [component]
-    (log/infof "Connecting to datomic on %s" (:uri config))
+    (log/infof "Connecting to datomic on %s" (:uri component-config))
     (if-not conn
-      (let [db (d/create-database (:uri config))
-            conn (d/connect (:uri config))]
+      (let [db (d/create-database (:uri component-config))
+            conn (d/connect (:uri component-config))]
         (assoc component :conn conn :db #(d/db conn)))
       this))
   (stop [component]
@@ -25,7 +25,7 @@
   (suspend [this]
     this)
   (resume [this old-component]
-    (if (= config (:config old-component))
+    (if (= component-config (:component-config old-component))
       (assoc this
              :conn (:conn old-component)
              :db (:db old-component))
@@ -33,4 +33,4 @@
           (component/start this)))))
 
 (defn create [config]
-  (map->Datomic {:config (c/env-coerce Config config)}))
+  (map->Datomic {:component-config (c/env-coerce Config config)}))

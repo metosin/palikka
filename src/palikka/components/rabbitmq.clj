@@ -17,12 +17,12 @@
    (s/optional-key :uri) s/Str
    s/Keyword s/Str})
 
-(defrecord RabbitMQ [^Connection mq config]
+(defrecord RabbitMQ [^Connection mq component-config]
   component/Lifecycle
   (start [this]
-    (log/infof "Connecting to RabbitMQ on %s:%d" (:host config) (:port config))
+    (log/infof "Connecting to RabbitMQ on %s:%d" (:host component-config) (:port component-config))
     (if-not mq
-      (assoc this :mq (rmq/connect config))
+      (assoc this :mq (rmq/connect component-config))
       this))
   (stop [this]
     (when (and mq (.isOpen mq))
@@ -37,10 +37,10 @@
   (suspend [this]
     this)
   (resume [this old-component]
-    (if (= config (:config old-component))
+    (if (= component-config (:component-config old-component))
       (assoc this :mq (:mq old-component))
       (do (component/stop old-component)
           (component/start this)))))
 
 (defn create [config]
-  (map->RabbitMQ {:config (c/env-coerce Config config)}))
+  (map->RabbitMQ {:component-config (c/env-coerce Config config)}))

@@ -10,11 +10,11 @@
   {:port s/Int
    s/Keyword s/Any})
 
-(defrecord Nrepl [config nrepl]
+(defrecord Nrepl [component-config nrepl]
   component/Lifecycle
   (start [this]
     (if-not nrepl
-      (let [{:keys [port]} config]
+      (let [{:keys [port]} component-config]
         (log/infof "Starting nrepl server on nrepl://%s:%s" "localhost" port)
         (assoc this :nrepl (nrepl/start-server :port port)))
       this))
@@ -30,10 +30,10 @@
   (suspend [this]
     this)
   (resume [this old-component]
-    (if (= config (:config old-component))
+    (if (= ncomponent-config (:component-config old-component))
       (assoc this :nrepl (:nrepl old-component))
       (do (component/stop old-component)
           (component/start this)))))
 
 (defn create [config]
-  (map->Nrepl {:config (c/env-coerce Config config)}))
+  (map->Nrepl {:component-config (c/env-coerce Config config)}))
