@@ -1,5 +1,8 @@
 ## Unreleased
 
+- Allow use of database component without port-number (with jdbc-url)
+- Added tests for the database component
+
 ## 0.4.0 (23.3.2015)
 
 - Add Aleph component
