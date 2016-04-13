@@ -43,6 +43,6 @@
                                   [ch.qos.logback/logback-classic "1.1.7"]
                                   [org.slf4j/slf4j-api "1.7.21"]
                                   ]}
-             :1.8 {:dependencies [[org.clojure/clojure "1.8.0-beta2"]]}}
-  :aliases {"all" ["with-profile" "dev:dev,1.8"]
+             :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}}
+  :aliases {"all" ["with-profile" "dev:dev,1.7"]
             "test-clj"  ["all" "do" ["midje"] ["check"]]})
