@@ -26,7 +26,7 @@
 
                                   ; Components
                                   [com.novemberain/monger "3.0.2"]
-                                  [hikari-cp "1.3.1"]
+                                  [hikari-cp "1.6.1"]
                                   [http-kit "2.1.19"]
                                   [postgresql/postgresql "9.3-1102.jdbc41"]
                                   [org.flywaydb/flyway-core "4.0"]
@@ -34,6 +34,10 @@
                                   [com.datomic/datomic-free "0.9.5350" :exclusions [org.slf4j/slf4j-nop joda-time]]
                                   [com.novemberain/langohr "3.5.1"]
                                   [aleph "0.4.1"]
+
+                                  ; Tests
+                                  [com.h2database/h2 "1.4.191"]
+                                  [org.clojure/java.jdbc "0.5.8"]
 
                                   ; Logging
                                   [ch.qos.logback/logback-classic "1.1.7"]
