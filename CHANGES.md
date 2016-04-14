@@ -1,4 +1,4 @@
-## Unreleased
+## 0.5.0 (13.4.2016)
 
 - Allow use of database component without port-number (with jdbc-url)
 - Added tests for the database component
