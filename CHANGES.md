@@ -1,3 +1,7 @@
+## 0.5.1 (19.5.2016)
+
+- Fixed Flyway component error handling and logging
+
 ## 0.5.0 (13.4.2016)
 
 - Allow use of database component without port-number (with jdbc-url)
