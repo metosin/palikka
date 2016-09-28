@@ -1,3 +1,9 @@
+## 0.5.2 (28.9.2016)
+
+- Don't throw Flyway exceptions by default
+- Update deps
+- Fix Datomic component
+
 ## 0.5.1 (19.5.2016)
 
 - Fixed Flyway component error handling and logging
