@@ -17,12 +17,13 @@
 
 (defn migrate!
   "Runs migrations"
-  [^Flyway flyway]
+  [^Flyway flyway {:keys [rethrow-exceptions?] :as opts}]
   (try
     (.migrate flyway)
     (catch FlywayException e
       (log/warnf e "WARNING: There were problems running the migrations: %s" (.getMessage e))
-      (throw e))))
+      (if rethrow-exceptions?
+        (throw e)))))
 
 (defn check-migration-status!
   "Checks if there are pending migrations."
@@ -41,7 +42,7 @@
   (start [this]
     (let [flyway (->Flyway (-> db :db :datasource) opts)]
       (if migrate?
-        (migrate! flyway)
+        (migrate! flyway opts)
         (check-migration-status! flyway)))
     this)
   (stop [this]
@@ -56,4 +57,5 @@
 (defn migrate
   "Runs the migrations."
   [opts]
-  (map->FlywayComponent {:opts (c/env-coerce Config opts) :migrate? true}))
+  (map->FlywayComponent {:opts (c/env-coerce Config opts)
+                         :migrate? true}))
