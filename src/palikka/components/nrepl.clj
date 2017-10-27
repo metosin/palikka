@@ -13,9 +13,9 @@
   component/Lifecycle
   (start [this]
     (if-not nrepl
-      (let [{:keys [port]} component-config]
+      (do
         (log/infof "Starting nrepl server on nrepl://%s:%s" "localhost" port)
-        (assoc this :nrepl (nrepl/start-server :port port)))
+        (assoc this :nrepl (apply nrepl/start-server (mapcat identity component-config))))
       this))
   (stop [this]
     (when nrepl
