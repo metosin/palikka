@@ -41,7 +41,6 @@
 
                                   ; Logging
                                   [metosin/lokit "0.1.0"]]}
-             :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}
-             :1.9 {:dependencies [[org.clojure/clojure "1.9.0-alpha13"]]}}
-  :aliases {"all" ["with-profile" "dev:dev,1.7:dev,1.9"]
+             :1.9 {:dependencies [[org.clojure/clojure "1.9.0-beta3"]]}}
+  :aliases {"all" ["with-profile" "dev:dev,1.9"]
             "test-clj"  ["all" "do" ["midje"] ["check"]]})
