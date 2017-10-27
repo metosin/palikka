@@ -14,7 +14,7 @@
   (start [this]
     (if-not nrepl
       (do
-        (log/infof "Starting nrepl server on nrepl://%s:%s" "localhost" port)
+        (log/infof "Starting nrepl server on nrepl://%s:%s" "localhost" (:port component-config 0))
         (assoc this :nrepl (apply nrepl/start-server (mapcat identity component-config))))
       this))
   (stop [this]
