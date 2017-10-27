@@ -13,8 +13,12 @@
   component/Lifecycle
   (start [this]
     (if-not nrepl
-      (do
-        (log/infof "Starting nrepl server on nrepl://%s:%s" "localhost" (:port component-config 0))
+      (let [component-config (merge {:bind "localhost"
+                                     :port 0}
+                                    component-config)]
+        (log/infof "Starting nrepl server on nrepl://%s:%s"
+                   (:bind component-config)
+                   (:port component-config))
         (assoc this :nrepl (apply nrepl/start-server (mapcat identity component-config))))
       this))
   (stop [this]
