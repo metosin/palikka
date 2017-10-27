@@ -1,4 +1,4 @@
-(defproject metosin/palikka "0.5.3-SNAPSHOT"
+(defproject metosin/palikka "0.5.3"
   :description "Metosin palikka"
   :url "https://github.com/metosin/palikka"
   :license {:name "Eclipse Public License"
