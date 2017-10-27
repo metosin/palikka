@@ -5,11 +5,11 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"
             :distribution :repo
             :comments "same as Clojure"}
-  :dependencies [[potemkin "0.4.3"]
-                 [org.clojure/tools.logging "0.3.1"]
-                 [prismatic/schema "1.1.3"]
-                 [metosin/schema-tools "0.9.0"]
-                 [com.stuartsierra/component "0.3.1"]]
+  :dependencies [[potemkin "0.4.4"]
+                 [org.clojure/tools.logging "0.4.0"]
+                 [prismatic/schema "1.1.7"]
+                 [metosin/schema-tools "0.9.1"]
+                 [com.stuartsierra/component "0.3.2"]]
   :plugins [[lein-codox "0.10.0"]]
 
   :codox {:source-uri "http://github.com/metosin/palikka/blob/master/{filepath}#L{line}"}
@@ -20,24 +20,24 @@
                    :resource-paths ["test-resources"]
                    :dependencies [[org.clojure/clojure "1.8.0"]
                                   [midje "1.9.0-alpha5"]
-                                  [clj-http "3.3.0"]
-                                  [reloaded.repl "0.2.3"]
+                                  [clj-http "3.7.0"]
+                                  [reloaded.repl "0.2.4"]
                                   [metosin/maailma "0.2.0"]
 
                                   ; Components
                                   [com.novemberain/monger "3.1.0"]
-                                  [hikari-cp "1.7.4"]
+                                  [hikari-cp "1.8.1"]
                                   [http-kit "2.2.0"]
-                                  [postgresql/postgresql "9.3-1102.jdbc41"]
-                                  [org.flywaydb/flyway-core "4.0.3"]
-                                  [org.clojure/tools.nrepl "0.2.12"]
-                                  [com.datomic/datomic-free "0.9.5394" :exclusions [org.slf4j/slf4j-nop joda-time]]
-                                  [com.novemberain/langohr "3.6.1"]
-                                  [aleph "0.4.2-alpha8"]
+                                  [org.postgresql/postgresql "42.1.4"]
+                                  [org.flywaydb/flyway-core "4.2.0"]
+                                  [org.clojure/tools.nrepl "0.2.13"]
+                                  [com.datomic/datomic-free "0.9.5561.62" :exclusions [org.slf4j/slf4j-nop joda-time]]
+                                  [com.novemberain/langohr "4.1.0"]
+                                  [aleph "0.4.3"]
 
                                   ; Tests
-                                  [com.h2database/h2 "1.4.192"]
-                                  [org.clojure/java.jdbc "0.6.1"]
+                                  [com.h2database/h2 "1.4.196"]
+                                  [org.clojure/java.jdbc "0.7.3"]
 
                                   ; Logging
                                   [metosin/lokit "0.1.0"]]}

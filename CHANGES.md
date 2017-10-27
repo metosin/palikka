@@ -1,3 +1,8 @@
+## 0.5.3 (27.10.2017)
+
+- Update deps
+- Allow all nrepl options, default `:bind` to `localhost`
+
 ## 0.5.2 (28.9.2016)
 
 - Don't throw Flyway exceptions by default
