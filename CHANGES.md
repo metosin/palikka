@@ -1,3 +1,9 @@
+## 0.5.4 (2018-01-26)
+
+- Stored context in a record and implemented a print-method for the record,
+which hides the contents to prevent accidentally exposing possible secrets
+on the context map.
+
 ## 0.5.3 (27.10.2017)
 
 - Update deps
