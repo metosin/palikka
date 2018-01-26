@@ -17,7 +17,9 @@
          (:body (client/get "http://localhost:9999")))))
 
 (deftest context-test
-  (is (instance? clojure.lang.Atom (:db (ctx)))))
+  (is (instance? clojure.lang.Atom (:db (ctx))))
+  (is (= "<<Context>>" (pr-str (ctx))))
+  (is (= "<<Context>>" (pr-str (merge (ctx) {:foo 1})))))
 
 (comment
   (system-up! #'system)

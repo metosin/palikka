@@ -1,5 +1,6 @@
 (ns palikka.core
-  (:require [com.stuartsierra.component :as component]))
+  (:require [com.stuartsierra.component :as component])
+  (:import [java.io Writer]))
 
 (defprotocol GetProperty
   (-get [this component]))
@@ -37,7 +38,20 @@
                        :component component
                        :dependencies spec})))))
 
+;; Use record to control print-method of the context map.
+;; This will ensure that secrets from context map (passwords from env)
+;; aren't accidentally exposed when printing exceptions or such.
+(defrecord Context [])
+
+(defmethod print-method Context
+  [v ^Writer w]
+  (.write w "<<Context>>"))
+
 (defn create-context
+  "Create Context record (map) from system, containing values
+  specified by providing calls.
+
+  Context record has print-method which hides the real contents."
   [system]
   (reduce
     (fn [context component]
@@ -47,5 +61,5 @@
                    context
                    ctx)
         context))
-    {}
+    (Context.)
     (vals system)))
