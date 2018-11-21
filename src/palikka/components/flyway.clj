@@ -10,10 +10,11 @@
                      :locations [s/Str]})
 
 (defn ->Flyway [ds {:keys [schemas locations]}]
-  (doto (Flyway.)
-    (.setDataSource ds)
-    (.setSchemas    (into-array String schemas))
-    (.setLocations  (into-array String (or locations ["/db/migration"])))))
+  (doto (Flyway/configure)
+    (.dataSource ds)
+    (.schemas    (into-array String schemas))
+    (.locations  (into-array String (or locations ["/db/migration"])))
+    (.load)))
 
 (defn migrate!
   "Runs migrations"

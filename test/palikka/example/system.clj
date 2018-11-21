@@ -1,6 +1,7 @@
 (ns palikka.example.system
   (:require [maailma.core :as m]
-            [palikka.sweet :refer [system-map providing using]]
+            [com.stuartsierra.component :refer [system-map using]]
+            [palikka.core :refer [providing]]
             [palikka.components.http-kit :as http-kit]
             [palikka.example.db :as db]
             [palikka.handler :refer [wrap-env wrap-context]]

@@ -1,5 +1,5 @@
 (ns palikka.components.nrepl
-  (:require [clojure.tools.nrepl.server :as nrepl]
+  (:require [nrepl.server :as nrepl]
             [com.stuartsierra.component :as component]
             [schema.core :as s]
             [clojure.tools.logging :as log]

@@ -11,7 +11,6 @@
     (component/stop db)))
 
 (deftest jdbc-url-test
-  (let [db (component/start (db/create {:jdbc-url "jdbc:h2:~/test"
-                                        :driver-class-name "org.h2.jdbcx.JdbcDataSource"}))]
+  (let [db (component/start (db/create {:jdbc-url "jdbc:h2:~/test"}))]
     (is (= [{:x "lol"}] (jdbc/query (:db db) ["SELECT 'lol' as x"])))
     (component/stop db)))

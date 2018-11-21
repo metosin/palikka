@@ -1,3 +1,9 @@
+## 0.6.0 (2018-11-21)
+
+- Update deps
+- Use `[nrepl "0.4.5"]`
+- Remove `palikka.sweet` namespace
+
 ## 0.5.4 (2018-01-26)
 
 - Stored context in a record and implemented a print-method for the record,
