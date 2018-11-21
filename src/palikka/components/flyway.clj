@@ -7,11 +7,13 @@
            [org.flywaydb.core.api FlywayException]))
 
 (s/defschema Config {:schemas [s/Str]
-                     :locations [s/Str]})
+                     :locations [s/Str]
+                     (s/optional-key :table) s/Str})
 
-(defn ->Flyway [ds {:keys [schemas locations]}]
+(defn ->Flyway [ds {:keys [schemas locations table]}]
   (doto (Flyway/configure)
     (.dataSource ds)
+    (cond-> table (.table table))
     (.schemas    (into-array String schemas))
     (.locations  (into-array String (or locations ["/db/migration"])))
     (.load)))
