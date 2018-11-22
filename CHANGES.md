@@ -1,5 +1,6 @@
 ## 0.6.1 (2018-11-21)
 
+- Fix Flyway component
 - Add Flyway `table` optin
 
 ## 0.6.0 (2018-11-21)

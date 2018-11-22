@@ -11,12 +11,12 @@
                      (s/optional-key :table) s/Str})
 
 (defn ->Flyway [ds {:keys [schemas locations table]}]
-  (doto (Flyway/configure)
-    (.dataSource ds)
-    (cond-> table (.table table))
-    (.schemas    (into-array String schemas))
-    (.locations  (into-array String (or locations ["/db/migration"])))
-    (.load)))
+  (-> (Flyway/configure)
+      (.dataSource ds)
+      (cond-> table (.table table))
+      (.schemas    (into-array String schemas))
+      (.locations  (into-array String (or locations ["/db/migration"])))
+      (.load)))
 
 (defn migrate!
   "Runs migrations"
