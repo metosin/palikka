@@ -1,26 +1,58 @@
 (ns palikka.components.flyway
   (:require [com.stuartsierra.component :as component]
             [clojure.tools.logging :as log]
-            [schema.core :as s]
-            [palikka.coerce :as c])
-  (:import [org.flywaydb.core Flyway]
-           [org.flywaydb.core.api FlywayException]))
+            [clojure.string :as str])
+  (:import [java.util HashMap]
+           [org.flywaydb.core Flyway]
+           [org.flywaydb.core.api FlywayException]
+           [org.flywaydb.core.api.configuration FluentConfiguration]))
 
-(s/defschema Config {:schemas [s/Str]
-                     :locations [s/Str]
-                     (s/optional-key :table) s/Str})
+(defn snake->camel [s]
+  (str/replace s #"-([a-zA-Z])" (fn [[_ c]]
+                                  (str/upper-case c))))
 
-(defn ->Flyway [ds {:keys [schemas locations table]}]
-  (-> (Flyway/configure)
-      (.dataSource ds)
-      (cond-> table (.table table))
-      (.schemas    (into-array String schemas))
-      (.locations  (into-array String (or locations ["/db/migration"])))
-      (.load)))
+(comment
+  (snake->camel "foo-bar"))
+
+;; TODO: Add
+(defn ->Flyway
+  "Check https://flywaydb.org/documentation/api/javadoc/org/flywaydb/core/api/configuration/FluentConfiguration.html
+  for available options.
+
+  Options keys can be provided in snake-case and converted to camelCase, or directly as camelCase.
+  If value is a Clojure vector, it is converted to Java Array, and Clojure map are converted to
+  Java HashMaps. Other values are used as is."
+  [ds options]
+  (let [options (reduce-kv (fn [acc k v]
+                             (let [k (snake->camel (name k))]
+                               (when (contains? acc k)
+                                 (throw (ex-info (str "Options contains duplicate keys: " k) {:key k})))
+                               (assoc acc k v)))
+                           {}
+                           options)]
+    (-> (Flyway/configure)
+        (.dataSource ds)
+        (as-> $ (reduce (fn [c [k v]]
+                          (let [[j-v v-class] (cond
+                                                (boolean? v) [(boolean v) Boolean/TYPE]
+                                                (integer? v) [(int v) Integer/TYPE]
+                                                (vector? v) (let [v (into-array (class (first v)) v)]
+                                                              [v (class v)])
+                                                (map? v) [(HashMap. v) HashMap]
+                                                :else [v (class v)])
+                                method (try
+                                         (.getDeclaredMethod FluentConfiguration k (into-array Class [v-class]))
+                                         (catch NoSuchMethodException _
+                                           (throw (ex-info (str "No such Flyway option: " k " (" (.getName v-class) ")") {:k k :class v-class :v v :options options}))) )]
+                            (.invoke method c (into-array Object [j-v]))))
+                        $
+                        ;; Remove palikka local options
+                        (dissoc options :rethrow-exceptions?)))
+        (.load))))
 
 (defn migrate!
   "Runs migrations"
-  [^Flyway flyway {:keys [rethrow-exceptions?] :as opts}]
+  [^Flyway flyway {:keys [rethrow-exceptions?]}]
   (try
     (.migrate flyway)
     (catch FlywayException e
@@ -55,10 +87,10 @@
   "Checks the migration status when starting the system
   so you'll know when to run the migrations."
   [opts]
-  (map->FlywayComponent {:opts (c/env-coerce Config opts)}))
+  (map->FlywayComponent {:opts opts}))
 
 (defn migrate
   "Runs the migrations."
   [opts]
-  (map->FlywayComponent {:opts (c/env-coerce Config opts)
+  (map->FlywayComponent {:opts opts
                          :migrate? true}))
