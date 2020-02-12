@@ -1,23 +1,32 @@
 (ns palikka.components.aleph
   (:require [aleph.http :as aleph]
+            [aleph.netty :as netty]
             [com.stuartsierra.component :as component]
             [schema.core :as s]
             [clojure.tools.logging :as log]
-            [palikka.coerce :as c]))
+            [palikka.coerce :as c])
+  (:import [java.net InetSocketAddress]))
 
 (s/defschema Config
   {:port s/Int
+   (s/optional-key :host) s/Str
    s/Keyword s/Any})
 
 (defrecord Aleph [component-config component-handler aleph]
   component/Lifecycle
   (start [this]
-    (log/infof "Aleph listening at http://%s:%s" "0.0.0.0" (:port component-config))
     (if-not aleph
       (let [handler (cond
                      (map? component-handler) ((:fn component-handler) this)
-                     :else component-handler)]
-        (assoc this :aleph (aleph/start-server handler component-config)))
+                     :else component-handler)
+            socket-address (if (:host component-config)
+                             (InetSocketAddress. (:host component-config) (:port component-config)))
+            component-config (assoc component-config :socket-address socket-address)
+            server (aleph/start-server handler component-config)]
+        (log/infof "Aleph listening at http://%s:%s"
+                   (or (:host component-config) "0.0.0.0")
+                   (netty/port server))
+        (assoc this :aleph server))
       this))
   (stop [this]
     (if aleph

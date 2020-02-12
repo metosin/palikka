@@ -13,12 +13,15 @@
 (defrecord Http-kit [component-config component-handler http-kit]
   component/Lifecycle
   (start [this]
-    (log/infof "Http-kit listening at http://%s:%d" (or (:ip component-config) "0.0.0.0") (or (:port component-config) 8090))
     (if-not http-kit
       (let [handler (cond
                      (map? component-handler) ((:fn component-handler) this)
-                     :else component-handler)]
-        (assoc this :http-kit (http-kit/run-server handler component-config)))
+                     :else component-handler)
+            server (http-kit/run-server handler component-config)]
+        (log/infof "Http-kit listening at http://%s:%d"
+                   (or (:ip component-config) "0.0.0.0")
+                   (:local-port server))
+        (assoc this :http-kit server))
       this))
   (stop [this]
     (when http-kit
