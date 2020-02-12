@@ -1,3 +1,7 @@
+## 0.7.1 (2020-02-12)
+
+- Fix http-kit log message
+
 ## 0.7.0 (2020-02-12)
 
 - Support all Flyway options

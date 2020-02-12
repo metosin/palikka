@@ -32,6 +32,7 @@
                                   [com.datomic/datomic-free "0.9.5697" :exclusions [org.slf4j/slf4j-nop joda-time]]
                                   [com.novemberain/langohr "5.1.0"]
                                   [aleph "0.4.6"]
+                                  [org.immutant/web "2.1.10"]
 
                                   ; Tests
                                   [com.h2database/h2 "1.4.200"]

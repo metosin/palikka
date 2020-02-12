@@ -20,7 +20,7 @@
             server (http-kit/run-server handler component-config)]
         (log/infof "Http-kit listening at http://%s:%d"
                    (or (:ip component-config) "0.0.0.0")
-                   (:local-port server))
+                   (:local-port (meta server)))
         (assoc this :http-kit server))
       this))
   (stop [this]
