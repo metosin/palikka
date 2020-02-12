@@ -1,9 +1,10 @@
 sudo: false
 language: clojure
-lein: 2.7.1
+lein: 2.9.1
 script: lein test-clj
 jdk:
-- oraclejdk8
+- openjdk8
+- openjdk11
 cache:
   directories:
   - "$HOME/.m2"

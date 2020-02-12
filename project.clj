@@ -5,7 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"
             :distribution :repo
             :comments "same as Clojure"}
-  :dependencies [[org.clojure/tools.logging "0.5.0"]
+  :dependencies [[org.clojure/tools.logging "0.6.0"]
                  [prismatic/schema "1.1.12"]
                  [metosin/schema-tools "0.12.1"]
                  [com.stuartsierra/component "0.4.0"]]
@@ -13,8 +13,7 @@
 
   :codox {:source-uri "http://github.com/metosin/palikka/blob/master/{filepath}#L{line}"}
 
-  :profiles {:dev {:plugins [[jonase/eastwood "0.2.3"]
-                             [lein-midje "3.2.1"]]
+  :profiles {:dev {:plugins [[lein-midje "3.2.1"]]
                    :source-paths ["examples"]
                    :resource-paths ["test-resources"]
                    :dependencies [[org.clojure/clojure "1.10.1"]
@@ -27,8 +26,8 @@
                                   [com.novemberain/monger "3.5.0"]
                                   [hikari-cp "2.10.0"]
                                   [http-kit "2.3.0"]
-                                  [org.postgresql/postgresql "42.2.9"]
-                                  [org.flywaydb/flyway-core "6.1.4"]
+                                  [org.postgresql/postgresql "42.2.10"]
+                                  [org.flywaydb/flyway-core "6.2.2"]
                                   [nrepl "0.6.0"]
                                   [com.datomic/datomic-free "0.9.5697" :exclusions [org.slf4j/slf4j-nop joda-time]]
                                   [com.novemberain/langohr "5.1.0"]
