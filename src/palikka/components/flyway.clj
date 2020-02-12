@@ -2,7 +2,8 @@
   (:require [com.stuartsierra.component :as component]
             [clojure.tools.logging :as log]
             [clojure.string :as str])
-  (:import [java.util HashMap]
+  (:import [java.util Map HashMap]
+           [java.lang.reflect Method]
            [org.flywaydb.core Flyway]
            [org.flywaydb.core.api FlywayException]
            [org.flywaydb.core.api.configuration FluentConfiguration]))
@@ -23,32 +24,35 @@
   If value is a Clojure vector, it is converted to Java Array, and Clojure map are converted to
   Java HashMaps. Other values are used as is."
   [ds options]
-  (let [options (reduce-kv (fn [acc k v]
+  (let [options
+        (reduce-kv (fn [acc k v]
                              (let [k (snake->camel (name k))]
                                (when (contains? acc k)
                                  (throw (ex-info (str "Options contains duplicate keys: " k) {:key k})))
                                (assoc acc k v)))
                            {}
-                           options)]
-    (-> (Flyway/configure)
-        (.dataSource ds)
-        (as-> $ (reduce (fn [c [k v]]
-                          (let [[j-v v-class] (cond
-                                                (boolean? v) [(boolean v) Boolean/TYPE]
-                                                (integer? v) [(int v) Integer/TYPE]
-                                                (vector? v) (let [v (into-array (class (first v)) v)]
-                                                              [v (class v)])
-                                                (map? v) [(HashMap. v) HashMap]
-                                                :else [v (class v)])
-                                method (try
-                                         (.getDeclaredMethod FluentConfiguration k (into-array Class [v-class]))
-                                         (catch NoSuchMethodException _
-                                           (throw (ex-info (str "No such Flyway option: " k " (" (.getName v-class) ")") {:k k :class v-class :v v :options options}))) )]
-                            (.invoke method c (into-array Object [j-v]))))
-                        $
-                        ;; Remove palikka local options
-                        (dissoc options :rethrow-exceptions?)))
-        (.load))))
+                           options)
+
+        ^FluentConfiguration config
+        (-> (Flyway/configure)
+            (.dataSource ds)
+            (as-> $ (reduce (fn [c [k v]]
+                              (let [[j-v ^Class v-class] (cond
+                                                           (boolean? v) [(boolean v) Boolean/TYPE]
+                                                           (integer? v) [(int v) Integer/TYPE]
+                                                           (vector? v) (let [v (into-array (class (first v)) v)]
+                                                                         [v (class v)])
+                                                           (map? v) [(HashMap. ^Map v) HashMap]
+                                                           :else [v (class v)])
+                                    ^Method method (try
+                                                     (.getDeclaredMethod FluentConfiguration k (into-array Class [v-class]))
+                                                     (catch NoSuchMethodException _
+                                                       (throw (ex-info (str "No such Flyway option: " k " (" (.getName v-class) ")") {:k k :class v-class :v v :options options}))) )]
+                                (.invoke method c (into-array Object [j-v]))))
+                            $
+                            ;; Remove palikka local options
+                            (dissoc options :rethrow-exceptions?))))]
+    (.load config)))
 
 (defn migrate!
   "Runs migrations"

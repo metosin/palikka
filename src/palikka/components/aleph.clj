@@ -5,7 +5,8 @@
             [schema.core :as s]
             [clojure.tools.logging :as log]
             [palikka.coerce :as c])
-  (:import [java.net InetSocketAddress]))
+  (:import [java.net InetSocketAddress]
+           [java.io Closeable]))
 
 (s/defschema Config
   {:port s/Int
@@ -20,7 +21,7 @@
                      (map? component-handler) ((:fn component-handler) this)
                      :else component-handler)
             socket-address (if (:host component-config)
-                             (InetSocketAddress. (:host component-config) (:port component-config)))
+                             (InetSocketAddress. ^String (:host component-config) ^int (:port component-config)))
             component-config (assoc component-config :socket-address socket-address)
             server (aleph/start-server handler component-config)]
         (log/infof "Aleph listening at http://%s:%s"
@@ -31,7 +32,7 @@
   (stop [this]
     (if aleph
       (try
-        (.close aleph)
+        (.close ^Closeable aleph)
         (catch Throwable t
           (log/warn t "Error when stopping Aleph"))))
     (assoc this :aleph nil)))

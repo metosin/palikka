@@ -3,7 +3,8 @@
             [com.stuartsierra.component :as component]
             [schema.core :as s]
             [clojure.tools.logging :as log]
-            [palikka.coerce :as c]))
+            [palikka.coerce :as c])
+  (:import [com.mongodb DB]))
 
 (s/defschema Config
   {:url String})
@@ -18,7 +19,7 @@
           (assoc this
                  :conn conn
                  :db db
-                 :gfs (m/get-gridfs conn (.getName db))))
+                 :gfs (m/get-gridfs conn (.getName ^DB db))))
         this)))
   (stop [this]
     (when conn
