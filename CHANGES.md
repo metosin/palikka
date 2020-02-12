@@ -1,3 +1,11 @@
+## 0.7.0 (2020-02-12)
+
+- Support all Flyway options
+    - Flyway clojure options map is now converted dynamically to configuration
+    builder calls, so any option should be supported without changes to the
+    wrapper code.
+- Add Immutant-HTTP component
+
 ## 0.6.1 (2018-11-21)
 
 - Fix Flyway component
